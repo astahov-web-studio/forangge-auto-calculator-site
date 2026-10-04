@@ -1,0 +1,1583 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Автокалькулятор</title>
+<style>
+:root{
+  --bg:#f4f5f7;--card:#fff;--text:#17191d;--muted:#7a818c;--line:#e5e7eb;
+  --dark:#15181e;--soft:#f8fafc;--green:#0f9f6e;--blue:#2563eb;--orange:#d97706;
+  --red:#dc2626;--purple:#7c3aed;--shadow:0 1px 2px rgba(0,0,0,.025);
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.page{max-width:1320px;margin:auto;padding:26px 20px 60px}
+.header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:16px}
+.eyebrow{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#626975;margin-bottom:8px}
+.dot{width:8px;height:8px;border-radius:99px;background:var(--green)}
+h1{margin:0 0 7px;font-size:34px;line-height:1.05;letter-spacing:-.04em}
+.subtitle{margin:0;color:var(--muted);font-size:14px;max-width:760px}
+.btn{border:1px solid var(--line);background:#fff;color:#252932;border-radius:11px;min-height:40px;padding:0 13px;font-weight:700}
+.btn:hover{background:#fafafa}.btn.primary{background:var(--dark);color:#fff;border-color:var(--dark)}.btn.small{min-height:32px;padding:0 9px;font-size:12px}
+.btn.danger{color:#b42318}
+.main-tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin-bottom:18px;max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-y:none}
+.main-tabs::-webkit-scrollbar{display:none}
+.main-tab{border:0;background:transparent;padding:12px 2px;font-weight:750;color:#8a9099;white-space:nowrap;position:relative}
+.main-tab.active{color:#16191f}.main-tab.active:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:3px;background:#16191f}
+.badge-count{display:inline-flex;min-width:20px;height:20px;padding:0 6px;margin-left:6px;align-items:center;justify-content:center;border-radius:99px;background:#eceff3;font-size:10px}
+.view{display:none}.view.active{display:block}
+.direction-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.direction-tab{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 13px;font-weight:720;color:#626975}
+.direction-tab.active{background:#171a20;color:#fff;border-color:#171a20}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(350px,.8fr);gap:18px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:19px;box-shadow:var(--shadow)}
+.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:15px}
+.section-title{font-size:17px;font-weight:800;letter-spacing:-.02em}.section-note{font-size:11px;color:var(--muted);margin-top:4px}
+.pill{font-size:10px;color:#626975;background:#f2f4f7;border-radius:99px;padding:6px 8px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.full{grid-column:1/-1}
+label{display:block;font-size:12px;font-weight:700;color:#444a54;margin-bottom:6px}
+input,select,textarea{width:100%;border:1px solid #dfe3e8;background:#fff;border-radius:11px;outline:none;color:#17191d}
+input,select{height:44px;padding:0 12px} textarea{padding:11px 12px;min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#91a7d5;box-shadow:0 0 0 4px rgba(37,99,235,.07)}
+.input-wrap{position:relative}.input-wrap input{padding-right:52px}.suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:#8e949d;pointer-events:none}
+.hint{font-size:10px;color:#9aa0a8;margin-top:5px;line-height:1.35}
+.common-card{margin-bottom:14px}
+.status-select.status-Выдан{border-color:#86d5b4;background:#f1fbf7}.status-select.status-Впути{border-color:#aac3f4;background:#f4f7ff}.status-select.status-Вброни{border-color:#f6cd91;background:#fff9ee}.status-select.status-Возврат{border-color:#f1abab;background:#fff5f5}
+.comment-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.comment-preview{font-size:12px;color:#737a85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:130px}
+.result-card{position:sticky;top:16px;padding:0;overflow:hidden}.result-top{background:#16191f;color:#fff;padding:21px}
+.result-label{text-transform:uppercase;letter-spacing:.08em;color:#b9c0ca;font-weight:750;font-size:10px}
+.result-total{font-size:36px;font-weight:850;letter-spacing:-.045em;line-height:1.1;margin-top:8px}.result-total small{font-size:17px}
+.result-secondary{margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.13)}
+.result-secondary .k{font-size:11px;color:#b9c0ca}.result-secondary .v{font-size:22px;font-weight:800;margin-top:4px}
+.result-body{padding:16px 19px 19px}.result-row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #eef0f3;font-size:12px}
+.result-row:last-child{border:0}.result-row span:first-child{color:#777e88;max-width:62%}.result-row strong{text-align:right}
+.margin-box{display:grid;grid-template-columns:1fr 1fr;gap:9px;background:#f6f8fb;border-radius:13px;padding:12px;margin-top:12px}
+.margin-box .k{font-size:10px;color:#8c939e}.margin-box .v{font-size:15px;font-weight:800;margin-top:3px}
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.edit-banner{display:none;background:#fff1f1;border:1px solid #ef9a9a;border-radius:13px;padding:10px 12px;color:#a61b1b;font-size:12px;font-weight:700;align-items:center;justify-content:space-between;gap:10px}.edit-banner.show{display:flex}.edit-banner.stale{background:#fff7ed;border-color:#fdba74;color:#9a3412}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.toolbar .grow{flex:1;min-width:220px}
+.filter-grid{display:grid;grid-template-columns:1.25fr repeat(2,minmax(150px,.55fr));gap:9px}
+.summary-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.stat-k{font-size:10px;color:#8b929c;text-transform:uppercase;letter-spacing:.07em;font-weight:750}.stat-v{font-size:23px;font-weight:850;letter-spacing:-.03em;margin-top:6px}
+.table-card{padding:0;overflow:hidden}.table-scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1040px}
+th,td{padding:12px 13px;text-align:left;border-bottom:1px solid #eef0f3;vertical-align:middle}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#828a95;background:#fafbfc}td{font-size:12px}
+tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;color:#9399a3;margin-top:3px}.money{font-weight:750;white-space:nowrap}
+.status{display:inline-flex;align-items:center;border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800;white-space:nowrap}
+.s-Выдан{background:#e9f8f1;color:#087a52}.s-Впути{background:#edf3ff;color:#2459bd}.s-Вброни{background:#fff3df;color:#a85b00}.s-Возврат{background:#feecec;color:#b42318}.s-none{background:#f0f2f4;color:#6e7580}
+.icon-actions{display:flex;gap:5px;align-items:center}.icon-btn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800}.icon-btn:hover{background:#f5f6f8}
+.empty{padding:36px 18px;text-align:center;color:#9198a2;font-size:12px}
+.kpi-title{font-size:24px;font-weight:850;letter-spacing:-.03em;margin-bottom:4px}.kpi-sub{font-size:12px;color:var(--muted)}
+.period-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.quick-periods{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.analytics-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-top:14px}.analytics-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:17px}.analytics-card .k{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#89919b;font-weight:750}.analytics-card .v{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:7px}.analytics-card .note{font-size:10px;color:#989ea7;margin-top:6px}
+.detail-toggle{margin-top:14px;display:flex;justify-content:flex-end}
+.modal-bg{position:fixed;inset:0;background:rgba(17,24,39,.38);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;border:1px solid var(--line);width:min(600px,100%);box-shadow:0 24px 80px rgba(0,0,0,.18);padding:20px}.modal-title{font-size:19px;font-weight:850;margin-bottom:5px}.modal-sub{font-size:11px;color:#868d97;margin-bottom:13px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,12px);background:#15181e;color:#fff;border-radius:99px;padding:9px 14px;font-size:11px;opacity:0;pointer-events:none;transition:.2s;z-index:200}.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-summary{display:none}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.result-card{position:static}.period-grid{grid-template-columns:1fr 1fr}.analytics-grid{grid-template-columns:1fr 1fr}.analytics-grid .analytics-card:first-child{grid-column:1/-1}}
+@media(max-width:720px){.page{padding:18px 12px 45px}.header{flex-direction:column}h1{font-size:28px}.grid,.filter-grid{grid-template-columns:1fr}.full{grid-column:auto}.summary-stats,.analytics-grid,.period-grid{grid-template-columns:1fr}.analytics-grid .analytics-card:first-child{grid-column:auto}.desktop-table{display:none}.mobile-summary{display:block;padding:11px}.mcard{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fff;margin-bottom:9px}.mcard-top{display:flex;justify-content:space-between;gap:10px}.mcard-title{font-weight:800;font-size:13px}.mcard-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}.mcard-grid .k{font-size:9px;color:#979da6;text-transform:uppercase}.mcard-grid .v{font-size:12px;font-weight:750;margin-top:2px}.actions-grid{grid-template-columns:1fr}.result-total{font-size:32px}}
+
+.brand-by{
+  color:#16a36f;
+  font-weight:850;
+}
+.direction-tab.active{
+  background:linear-gradient(135deg,#171a20,#242a34);
+  box-shadow:0 6px 18px rgba(23,26,32,.12);
+}
+.result-top{
+  background:linear-gradient(135deg,#16191f 0%,#1b2522 100%);
+}
+.margin-box{
+  background:#eefaf4;
+  border:1px solid #cceedd;
+}
+.margin-box .k{
+  color:#4e7c67;
+}
+.margin-box .v{
+  color:#087a52;
+}
+.analytics-card:nth-child(2),
+.analytics-card:nth-child(3){
+  background:#f2fbf6;
+  border-color:#cfeede;
+}
+.analytics-card:nth-child(2) .v,
+.analytics-card:nth-child(3) .v{
+  color:#087a52;
+}
+.stat:nth-child(3){
+  background:#f3fbf7;
+  border-color:#d0ecdd;
+}
+.stat:nth-child(3) .stat-v{
+  color:#087a52;
+}
+.btn.primary{
+  background:linear-gradient(135deg,#171a20,#252b34);
+}
+.icon-btn{
+  background:#f4f6f8;
+  border-color:#d9dde3;
+  color:#2e3440;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.icon-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+.icon-btn.edit-action{
+  background:#eef4ff;
+  border-color:#c7d7fa;
+  color:#2256b8;
+}
+.icon-btn.comment-action{
+  background:#fff7e8;
+  border-color:#f2d7a6;
+  color:#9b5f07;
+}
+.icon-btn.export-action{
+  background:#eefaf4;
+  border-color:#bfe6d1;
+  color:#087a52;
+}
+.icon-btn.pdf-action{
+  background:#fff0f0;
+  border-color:#f2c6c6;
+  color:#b42318;
+}
+.result-row strong{
+  color:#272c34;
+}
+.status{
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.025);
+}
+.mobile-actions{
+  grid-column:1/-1;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:2px;
+}
+.mobile-actions .btn{
+  min-height:34px;
+}
+.mobile-edit{
+  background:#eef4ff;
+  border-color:#c7d7fa;
+  color:#2256b8;
+}
+.mobile-comment{
+  background:#fff7e8;
+  border-color:#f2d7a6;
+  color:#9b5f07;
+}
+.mobile-export{
+  background:#eefaf4;
+  border-color:#bfe6d1;
+  color:#087a52;
+}
+.mobile-pdf{
+  background:#fff0f0;
+  border-color:#f2c6c6;
+  color:#b42318;
+}
+@media(max-width:720px){
+  .header .btn{width:100%}
+  .direction-tabs{
+    flex-wrap:nowrap;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-bottom:0;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+    overscroll-behavior-y:none;
+  }
+  .direction-tabs::-webkit-scrollbar{display:none}
+  .direction-tab{flex:0 0 auto}
+  .comment-line{align-items:stretch}
+  .comment-line .btn{width:100%}
+  .comment-preview{width:100%;white-space:normal}
+  .summary-stats{gap:8px}
+  .stat{padding:13px}
+  .mobile-actions .btn{flex:1 1 calc(50% - 6px)}
+}
+
+
+#appPage{display:none}
+.login-shell{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(15,159,110,.11),transparent 32%),
+    radial-gradient(circle at 85% 90%,rgba(37,99,235,.08),transparent 30%),
+    #f4f5f7;
+}
+.login-card{
+  width:min(420px,100%);background:#fff;border:1px solid #e2e5e9;border-radius:22px;
+  padding:28px;box-shadow:0 18px 55px rgba(17,24,39,.10)
+}
+.login-brand{font-size:13px;font-weight:850;color:#6e7580;margin-bottom:28px}
+.login-brand span{color:#0f9f6e}
+.login-title{font-size:30px;font-weight:850;letter-spacing:-.04em}
+.login-sub{font-size:13px;color:#858c96;margin:6px 0 24px}
+.login-button{width:100%;margin-top:8px;min-height:46px}
+.login-error{min-height:28px;padding-top:8px;color:#b42318;font-size:12px}
+.login-note{font-size:10px;line-height:1.45;color:#9aa0a8;margin-top:17px;text-align:center}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.user-chip{display:inline-flex;align-items:center;min-height:38px;padding:0 11px;border-radius:99px;background:#eefaf4;color:#087a52;font-size:11px;font-weight:800}
+.logout-btn{color:#6b7280}
+.sync-state{
+  position:fixed;right:14px;bottom:14px;background:#fff;border:1px solid #e2e5e9;border-radius:99px;
+  padding:7px 10px;font-size:10px;color:#747b85;box-shadow:0 6px 20px rgba(0,0,0,.06);z-index:90
+}
+.sync-state.ok{color:#087a52;border-color:#cceedd;background:#f2fbf6}
+.sync-state.bad{color:#b42318;border-color:#f0c5c5;background:#fff6f6}
+@media(max-width:720px){
+  .header-actions{width:100%;justify-content:stretch}
+  .header-actions .btn{flex:1}
+  .user-chip{width:100%;justify-content:center}
+}
+
+.build-tag{margin-left:6px;padding:2px 6px;border-radius:999px;background:#eefaf4;color:#087a52;font-size:9px;font-weight:850;letter-spacing:.03em;text-transform:none}
+
+.edit-banner-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+ .danger-zone{
+  display:none;
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid #eef0f3;
+}
+.danger-zone.show{display:block}
+.delete-record-btn{
+  width:100%;
+  min-height:40px;
+  border:1px solid #f0c5c5;
+  background:#fff8f8;
+  color:#b42318;
+  border-radius:11px;
+  cursor:pointer;
+  font-weight:750;
+  transition:.15s;
+}
+.delete-record-btn:hover{
+  background:#feecec;
+  border-color:#e7a6a6;
+}
+.delete-record-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+@media(max-width:720px){
+  .edit-banner{
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:flex-start;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    gap:8px;
+  }
+  .edit-banner > span{
+    display:block;
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+  .edit-banner-actions{
+    width:100%;
+    min-width:0;
+    justify-content:flex-start;
+  }
+  .edit-banner-actions .btn{
+    width:100%;
+    max-width:100%;
+    white-space:normal;
+    text-align:center;
+  }
+}
+
+
+@media(max-width:720px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .page{max-width:100%;overflow-x:hidden}
+}
+
+
+/* v0.11: red edit-mode banner */
+.edit-banner{
+  background:#fff1f1 !important;
+  border-color:#ef9a9a !important;
+  color:#a61b1b !important;
+}
+.edit-banner #editText{
+  color:#a61b1b !important;
+  font-weight:800;
+}
+.edit-banner .btn{
+  border-color:#e4a6a6;
+}
+
+
+.history-mode-bar{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+  padding:13px 15px;
+  border:1px solid #ead7a6;
+  border-radius:14px;
+  background:#fffaf0;
+}
+.history-mode-bar.show{display:flex}
+.history-mode-title{font-size:13px;font-weight:850;color:#7b5200}
+.history-mode-note{font-size:11px;color:#8b7550;margin-top:3px}
+.history-mode-actions{display:flex;gap:8px;flex:0 0 auto}
+.history-count-stat{margin-bottom:14px}
+.promote-action{
+  background:#eaf8f1!important;
+  border-color:#b9e2cd!important;
+  color:#087a52!important;
+}
+.promote-edit-wrap{
+  display:none;
+  margin-top:10px;
+}
+.promote-edit-wrap.show{display:block}
+.promote-edit-btn{
+  width:100%;
+  min-height:42px;
+  border:1px solid #acd9c1;
+  background:#ebf9f2;
+  color:#087a52;
+  border-radius:11px;
+  cursor:pointer;
+  font-weight:800;
+}
+.promote-edit-btn:hover{background:#dff5ea}
+@media(max-width:720px){
+  .history-mode-bar{flex-direction:column;align-items:stretch}
+  .history-mode-actions{width:100%}
+  .history-mode-actions .btn{width:100%}
+}
+
+
+.scope-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:24px;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.scope-history{
+  background:#fff4dc;
+  border:1px solid #ead39a;
+  color:#825800;
+}
+.scope-summary{
+  background:#eaf8f1;
+  border:1px solid #b9e2cd;
+  color:#087a52;
+}
+
+
+.direction-tab .tab-main{display:block;line-height:1.05}
+.direction-tab .tab-sub{display:block;font-size:9px;font-weight:650;opacity:.65;margin-top:3px;line-height:1}
+.converted-value{
+  position:absolute;right:54px;top:50%;transform:translateY(-50%);
+  font-size:10px;font-weight:800;color:#087a52;background:#eefaf4;
+  border-radius:7px;padding:3px 6px;pointer-events:none;white-space:nowrap
+}
+.input-wrap.has-conversion input{padding-right:145px}
+@media(max-width:520px){
+  .converted-value{position:static;display:block;transform:none;margin-top:6px;width:max-content;max-width:100%}
+  .input-wrap.has-conversion input{padding-right:52px}
+}
+
+</style>
+</head>
+<body>
+
+<div class="login-shell" id="loginShell">
+  <div class="login-card">
+    <div class="login-brand">Автокалькулятор <span>by forangge</span></div>
+    <div class="login-title">Вход</div>
+    <div class="login-sub">Доступ только для сотрудников</div>
+    <form id="loginForm">
+      <label>Логин</label>
+      <input id="loginInput" autocomplete="username" placeholder="admin" required>
+      <div style="height:12px"></div>
+      <label>Пароль</label>
+      <input id="passwordInput" type="password" autocomplete="current-password" placeholder="Пароль" required>
+      <div class="login-error" id="loginError"></div>
+      <button class="btn primary login-button" id="loginBtn" type="submit">Войти</button>
+    </form>
+    <div class="login-note">Расчёты хранятся в защищённой общей базе, а не в этом браузере.</div>
+  </div>
+</div>
+
+<div class="page" id="appPage">
+  <div class="header">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.16</span></div>
+      <h1>Автокалькулятор <span class="brand-by">by forangge</span></h1>
+      <p class="subtitle">Бишкек, Харгос, Китай, Китай через Бишкек и Корея в одном интерфейсе.</p>
+    </div>
+    <div class="header-actions">
+      <span class="user-chip" id="userChip"></span>
+      <button class="btn" id="newTopBtn">+ Новый расчёт</button>
+      <button class="btn logout-btn" id="logoutBtn">Выйти</button>
+    </div>
+  </div>
+
+  <nav class="main-tabs">
+    <button class="main-tab active" data-view="calculator">Калькулятор</button>
+    <button class="main-tab" data-view="history">История просчётов <span class="badge-count" id="historyCount">0</span></button>
+    <button class="main-tab" data-view="summary">Сводка <span class="badge-count" id="recordCount">0</span></button>
+    <button class="main-tab" data-view="analytics">Итоги</button>
+  </nav>
+
+  <section class="view active" id="calculatorView">
+    <div class="history-mode-bar" id="historyModeBar">
+      <div>
+        <div class="history-mode-title">Предварительный просчёт</div>
+        <div class="history-mode-note">Любое новое сохранение из «Калькулятора» попадает в «Историю просчётов» и не входит в «Сводку» или «Итоги», пока вы вручную не нажмёте «В Сводку».</div>
+      </div>
+      <div class="history-mode-actions">
+        <button class="btn" id="historyOpenListBtn">Открыть историю</button>
+      </div>
+    </div>
+    <div class="direction-tabs" id="directionTabs"></div>
+    <div class="edit-banner" id="editBanner">
+      <span id="editText"></span>
+      <div class="edit-banner-actions">
+        <button class="btn small" id="cancelEdit">Отменить редактирование</button>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="layout">
+      <div class="stack">
+        <section class="card common-card">
+          <div class="section-head"><div><div class="section-title">Автомобиль</div><div class="section-note">Название, дата и текущий статус</div></div><div class="pill" id="directionPill"></div></div>
+          <div class="grid">
+            <div class="field full"><label>Марка авто, клиент, телефон</label><input id="titleInput" placeholder="Например: GAC S7 · Алексей · 3723"></div>
+            <div class="field"><label>Дата расчёта</label><input id="dateInput" type="date"></div>
+            <div class="field"><label>Статус</label><select id="statusInput" class="status-select">
+              <option value="">Без статуса</option><option>В брони</option><option>В пути</option><option>Выдан</option><option>Возврат</option>
+            </select></div>
+            <div class="field full">
+              <label>Комментарий</label>
+              <div class="comment-line"><button class="btn" id="commentDraftBtn">💬 Добавить / изменить комментарий</button><div class="comment-preview" id="commentPreview">Комментария нет</div></div>
+            </div>
+          </div>
+        </section>
+
+        <div id="dynamicGroups" class="stack"></div>
+      </div>
+
+      <aside class="card result-card">
+        <div class="result-top">
+          <div class="result-label">Итого с маржой</div>
+          <div class="result-total" id="grandTotal">0 <small>₽</small></div>
+          <div class="result-secondary"><div class="k">Для клиента без маржи</div><div class="v" id="clientTotal">0 ₽</div></div>
+        </div>
+        <div class="result-body">
+          <div id="breakdown"></div>
+          <div class="margin-box">
+            <div class="margin-primary"><div class="k">Маржа</div><div class="v" id="marginRub">0 ₽</div></div>
+            <div><div class="k">Маржа в долларах</div><div class="v" id="marginUsd">$0</div></div>
+          </div>
+          <div class="actions-grid">
+            <button class="btn primary" id="saveBtn">Сохранить расчёт</button>
+            <button class="btn" id="singleExcelBtn">Excel</button>
+            <button class="btn" id="singlePdfBtn">PDF</button>
+            <button class="btn" id="newBtn">Новый расчёт</button>
+          </div>
+          <div class="promote-edit-wrap" id="promoteEditWrap">
+            <button class="promote-edit-btn" id="promoteEditBtn" type="button">→ Сохранить и отправить в Сводку</button>
+          </div>
+          <div class="danger-zone" id="dangerZone">
+            <button class="delete-record-btn" id="deleteEditBtn" type="button">🗑 Удалить расчёт</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="view" id="historyListView">
+    <div class="history-mode-bar show">
+      <div>
+        <div class="history-mode-title">История всех просчётов</div>
+        <div class="history-mode-note">Здесь хранятся все сохранённые расчёты. «Предварительные» не входят в «Сводку» и «Итоги», а записи «В Сводке» уже учитываются в рабочих показателях.</div>
+      </div>
+      <div class="history-mode-actions">
+        <button class="btn primary" id="historyNewBtn">+ Перейти в калькулятор</button>
+      </div>
+    </div>
+    <div class="toolbar">
+      <input class="grow" id="historySearch" placeholder="Поиск по машине, клиенту, телефону, VIN или комментарию">
+      <select id="historyDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select>
+      <select id="historyScope"><option value="">Все просчёты</option><option value="history">Предварительные</option><option value="summary">В Сводке</option></select>
+    </div>
+    <div class="summary-stats history-count-stat">
+      <div class="stat"><div class="stat-k">Просчётов в истории</div><div class="stat-v" id="historyVisibleCount">0</div></div>
+    </div>
+    <section class="card table-card">
+      <div class="table-scroll desktop-table"><table>
+        <thead><tr><th>Дата</th><th>Автомобиль / клиент</th><th>Направление</th><th>Учёт</th><th>Статус</th><th>Для клиента</th><th>Маржа</th><th>Действия</th></tr></thead>
+        <tbody id="historyBody"></tbody>
+      </table><div class="empty" id="historyEmpty">В истории пока нет подходящих просчётов.</div></div>
+      <div class="mobile-summary" id="historyMobile"></div>
+    </section>
+  </section>
+
+  <section class="view" id="summaryView">
+    <div class="toolbar">
+      <input class="grow" id="summarySearch" placeholder="Поиск по машине, клиенту, телефону, VIN или комментарию">
+      <select id="summaryDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select>
+      <select id="summaryStatus"><option value="">Все статусы</option><option>В брони</option><option>В пути</option><option>Выдан</option><option>Возврат</option><option value="__none">Без статуса</option></select>
+      <button class="btn" id="summaryExcelBtn">Выгрузить Excel</button>
+      <button class="btn" id="summaryPdfBtn">Выгрузить PDF</button>
+    </div>
+    <div class="summary-stats">
+      <div class="stat"><div class="stat-k">Расчётов</div><div class="stat-v" id="sumCount">0</div></div>
+      <div class="stat"><div class="stat-k">Для клиентов</div><div class="stat-v" id="sumClient">0 ₽</div></div>
+      <div class="stat"><div class="stat-k">С маржой</div><div class="stat-v" id="sumTotal">0 ₽</div></div>
+    </div>
+    <section class="card table-card">
+      <div class="table-scroll desktop-table"><table>
+        <thead><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th><th>Действия</th></tr></thead>
+        <tbody id="summaryBody"></tbody>
+      </table><div class="empty" id="summaryEmpty">Нет записей по выбранным фильтрам.</div></div>
+      <div class="mobile-summary" id="summaryMobile"></div>
+    </section>
+  </section>
+
+  <section class="view" id="analyticsView">
+    <section class="card">
+      <div class="kpi-title">Итоги</div>
+      <div class="kpi-sub">Можно указать любой период по дням, направление и любой статус. Пустые даты не попадают в фильтрованный период.</div>
+      <div style="height:16px"></div>
+      <div class="period-grid">
+        <div><label>Дата от</label><input id="anFrom" type="date"></div>
+        <div><label>Дата до</label><input id="anTo" type="date"></div>
+        <div><label>Направление</label><select id="anDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select></div>
+        <div><label>Статус</label><select id="anStatus"><option value="">Все статусы</option><option>В брони</option><option>В пути</option><option>Выдан</option><option>Возврат</option><option value="__none">Без статуса</option></select></div>
+      </div>
+      <div class="quick-periods"><button class="btn small" id="thisMonth">Этот месяц</button><button class="btn small" id="prevMonth">Прошлый месяц</button><button class="btn small" id="allTime">За всё время</button></div>
+
+      <div class="analytics-grid">
+        <div class="analytics-card"><div class="k" id="anCountLabel">Машин</div><div class="v" id="anCount">0</div><div class="note" id="anPeriodText">За всё время</div></div>
+        <div class="analytics-card"><div class="k">Маржа в рублях</div><div class="v" id="anMarginRub">0 ₽</div><div class="note">Сумма маржи по выбранным машинам</div></div>
+        <div class="analytics-card"><div class="k">Маржа в долларах</div><div class="v" id="anMarginUsd">$0</div><div class="note" id="anUsdNote">По доступным курсам</div></div>
+        <div class="analytics-card"><div class="k">Средняя маржа ₽</div><div class="v" id="anAvgMarginRub">0 ₽</div><div class="note">Среднее по выбранным машинам</div></div>
+        <div class="analytics-card"><div class="k">Средняя маржа $</div><div class="v" id="anAvgMarginUsd">—</div><div class="note" id="anAvgUsdNote">По расчётам с доступным курсом</div></div>
+      </div>
+      <div class="detail-toggle"><button class="btn primary" id="detailsToggle">Показать машины</button></div>
+    </section>
+
+    <section class="card table-card" id="detailsCard" style="display:none;margin-top:14px">
+      <div class="table-scroll"><table>
+        <thead><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>Маржа ₽</th><th>Маржа $</th><th></th></tr></thead>
+        <tbody id="detailsBody"></tbody>
+      </table><div class="empty" id="detailsEmpty">За этот период машин нет.</div></div>
+    </section>
+  </section>
+</div>
+
+<div class="modal-bg" id="commentModal">
+  <div class="modal">
+    <div class="modal-title">Комментарий</div>
+    <div class="modal-sub" id="commentModalSub">Комментарий к расчёту</div>
+    <textarea id="commentText" placeholder="Напишите комментарий, заметку, договорённость с клиентом..."></textarea>
+    <div class="modal-actions"><button class="btn" id="commentCancel">Отмена</button><button class="btn primary" id="commentSave">Сохранить комментарий</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="sync-state" id="syncState" style="display:none">Синхронизация</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://lvhpnatpsfodqfkvsmnh.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_DCjGSeXT4qQ89OkDVZx_Pw_PZDCO3yV";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const LOGIN_DOMAIN="@forangge.local";
+const DIRECTIONS=["Бишкек","Харгос","Китай","Китай через Бишкек","Корея"];
+const STATUS_CLASSES={"Выдан":"s-Выдан","В пути":"s-Впути","В брони":"s-Вброни","Возврат":"s-Возврат","":"s-none"};
+const nf0=new Intl.NumberFormat("ru-RU",{maximumFractionDigits:0});
+const nf2=new Intl.NumberFormat("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2});
+const usd0=new Intl.NumberFormat("en-US",{maximumFractionDigits:0});
+const rub=v=>`${nf0.format(Number(v)||0)} ₽`;
+const usd=v=>v==null||!Number.isFinite(Number(v))?"—":`$${usd0.format(Number(v)||0)}`;
+const num=v=>{const x=parseFloat(v);return Number.isFinite(x)?x:0};
+
+function today(){const d=new Date();const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
+function uid(){return "r-"+Date.now()+"-"+Math.random().toString(16).slice(2)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+const CONFIG={
+"Бишкек":{
+  groups:[
+    {title:"Курсы и обмен",note:"Как на листе «Бишкек»",fields:[
+      {id:"usdRate",label:"Курс USD/RUB",suffix:"₽/$"},
+      {id:"transferFee",label:"Комиссия за перевод «Восток»",suffix:"%",def:1.5},
+      {id:"tezerFee",label:"Фактический обмен USDT в Бишкеке",suffix:"%",def:.4},
+    ]},
+    {title:"Автомобиль и логистика",note:"Суммы в долларах",fields:[
+      {id:"carUsd",label:"Стоимость автомобиля",suffix:"$"},
+      {id:"logisticsUsd",label:"Логистика и страхование",suffix:"$"},
+      {id:"bishkekUsd",label:"Расходы в Бишкеке",suffix:"$"},
+    ]},
+    {title:"Расходы, сборы и маржа",note:"Суммы в рублях",fields:[
+      {id:"prepRub",label:"Подготовка / брокер / эвакуаторы / доп. расходы",suffix:"₽"},
+      {id:"utilRub",label:"Утильсбор",suffix:"₽"},
+      {id:"companyRub",label:"Комиссия компании",suffix:"₽"},
+    ]}
+  ],
+  calc:i=>{const S=num(i.usdRate)*(1+num(i.transferFee)/100),B=num(i.carUsd)*S,E=num(i.logisticsUsd)*S,G=num(i.bishkekUsd)*S,J=num(i.prepRub),K=(B+E+G+J)*(1+num(i.tezerFee)/100),N=K+num(i.utilRub),O=N+num(i.companyRub),m=num(i.companyRub);return{client:N,total:O,marginRub:m,marginUsd:S?m/S:null,breakdown:[["Курс с комиссией",S?nf2.format(S)+" ₽/$":"0 ₽/$"],["Автомобиль",rub(B)],["Логистика",rub(E)],["Расходы в Бишкеке",rub(G)],["Расходы с учётом обмена",rub(K)],["Утильсбор",rub(i.utilRub)],["Без утиля",S?usd((N-num(i.utilRub))/S):"—"],["С маржой без утиля",S?usd((O-num(i.utilRub))/S):"—"]]}}
+},
+"Харгос":{
+  groups:[
+    {title:"Курс и автомобиль",note:"Расчёт по USD/RUB",fields:[
+      {id:"usdRate",label:"Курс USD/RUB",suffix:"₽/$"},{id:"transferFee",label:"Комиссия за перевод «Восток»",suffix:"%",def:1.3},{id:"eurRate",label:"Курс EUR/RUB",suffix:"₽/€"},
+      {id:"priceUsd",label:"Цена автомобиля",suffix:"$"},{id:"logisticsUsd",label:"Логистика до Москвы",suffix:"$"},
+    ]},
+    {title:"Таможня и расходы",note:"Суммы в рублях",fields:[
+      {id:"customsPurchaseRub",label:"Таможня по курсу евро на день покупки",suffix:"₽"},{id:"customsArrivalRub",label:"Таможня по текущему курсу евро при прибытии",suffix:"₽"},
+      {id:"rfExpensesRub",label:"Расходы РФ: погрузка / разгрузка и т.п.",suffix:"₽"},{id:"brokerRub",label:"Брокер / ПТС / СБГТС",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},
+    ]}
+  ],
+  calc:i=>{const P=num(i.usdRate)*(1+num(i.transferFee)/100),C=num(i.priceUsd)*P,F=num(i.logisticsUsd)*P,G=num(i.priceUsd)+num(i.logisticsUsd),H=G*P,M=H+num(i.customsPurchaseRub)+num(i.rfExpensesRub)+num(i.customsArrivalRub)+num(i.brokerRub),N=M+num(i.marginRub),m=num(i.marginRub);return{client:M,total:N,marginRub:m,marginUsd:P?m/P:null,breakdown:[["Курс с комиссией",P?nf2.format(P)+" ₽/$":"0 ₽/$"],["Авто в рублях",rub(C)],["Логистика в рублях",rub(F)],["Авто + доставка",usd(G)],["Авто + доставка в рублях",rub(H)],["Таможня при покупке",rub(i.customsPurchaseRub)],["Таможня при прибытии",rub(i.customsArrivalRub)],["Брокер / ПТС / СБГТС",rub(i.brokerRub)]]}}
+},
+"Китай":{
+  groups:[
+    {title:"Автомобиль",note:"Китайский расчёт",fields:[
+      {id:"vin",label:"VIN / идентификатор",type:"text",suffix:""},
+      {id:"carCny",label:"Стоимость автомобиля в Китае",suffix:"¥"},
+      {id:"cnyRate",label:"Курс юаня",suffix:"₽/¥"},
+      {id:"conversionFee",label:"Надбавка к конвертации",suffix:"%",def:2},
+    ]},
+    {title:"Расходы и маржа",note:"Суммы в рублях",fields:[
+      {id:"utilCustomsRub",label:"Утиль и таможня",suffix:"₽"},{id:"brokerRub",label:"Брокер",suffix:"₽"},
+      {id:"deliveryRub",label:"Стоимость доставки",suffix:"₽"},{id:"expensesRub",label:"Расходы",suffix:"₽"},
+      {id:"equipmentRub",label:"Доп. оборудование",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},
+      {id:"usdRateForMargin",label:"USD/RUB для пересчёта маржи в $",suffix:"₽/$",hint:"На стоимость авто не влияет. Нужен только для вкладки «Итоги»."},
+    ]}
+  ],
+  calc:i=>{const D=num(i.carCny)*num(i.cnyRate)*(1+num(i.conversionFee)/100),K=D+num(i.utilCustomsRub)+num(i.brokerRub)+num(i.deliveryRub)+num(i.expensesRub)+num(i.equipmentRub),L=K+num(i.marginRub),m=num(i.marginRub),r=num(i.usdRateForMargin);return{client:K,total:L,marginRub:m,marginUsd:r?m/r:null,breakdown:[["Автомобиль в рублях",rub(D)],["Утиль и таможня",rub(i.utilCustomsRub)],["Брокер",rub(i.brokerRub)],["Доставка",rub(i.deliveryRub)],["Расходы",rub(i.expensesRub)],["Доп. оборудование",rub(i.equipmentRub)]]}}
+},
+"Китай через Бишкек":{
+  groups:[
+    {title:"Автомобиль и курс",note:"Юани → рубли по введённому курсу",fields:[
+      {id:"cnyRate",label:"Курс юаня",suffix:"₽/¥"},
+      {id:"carCny",label:"Стоимость автомобиля",suffix:"¥",convertRub:true},
+      {id:"deliveryBishkekCny",label:"Доставка до Бишкека",suffix:"¥",convertRub:true},
+    ]},
+    {title:"Расходы и комиссия",note:"Суммы вводятся в рублях",fields:[
+      {id:"brokerRub",label:"Брокер",suffix:"₽"},
+      {id:"customsRub",label:"Стоимость таможни",suffix:"₽"},
+      {id:"utilRub",label:"Утильсбор",suffix:"₽"},
+      {id:"equipmentRub",label:"Доп. оборудование",suffix:"₽"},
+      {id:"usdRateForMargin",label:"Курс USD/RUB для маржи",suffix:"₽/$",hint:"На стоимость автомобиля не влияет. Используется только для пересчёта комиссии компании в доллары во вкладке «Итоги»."},
+      {id:"companyRub",label:"Комиссия компании",suffix:"₽"},
+    ]}
+  ],
+  calc:i=>{
+    const rate=num(i.cnyRate);
+    const carRub=num(i.carCny)*rate;
+    const deliveryRub=num(i.deliveryBishkekCny)*rate;
+    const base=carRub+deliveryRub+num(i.brokerRub)+num(i.customsRub)+num(i.utilRub)+num(i.equipmentRub);
+    const margin=num(i.companyRub);
+    const usdRate=num(i.usdRateForMargin);
+    return{
+      client:base,
+      total:base+margin,
+      marginRub:margin,
+      marginUsd:usdRate?margin/usdRate:null,
+      breakdown:[
+        ["Автомобиль в рублях",rub(carRub)],
+        ["Доставка до Бишкека в рублях",rub(deliveryRub)],
+        ["Брокер",rub(i.brokerRub)],
+        ["Таможня",rub(i.customsRub)],
+        ["Утильсбор",rub(i.utilRub)],
+        ["Доп. оборудование",rub(i.equipmentRub)]
+      ]
+    }
+  }
+},
+"Корея":{
+  groups:[
+    {title:"Автомобиль и курс",note:"Воны → доллары → рубли",fields:[
+      {id:"carWon",label:"Стоимость автомобиля",suffix:"₩"},{id:"wonPerUsd",label:"Курс вона к доллару",suffix:"₩/$"},{id:"usdRate",label:"Курс USD/RUB",suffix:"₽/$"},
+    ]},
+    {title:"Расходы и маржа",note:"Суммы в рублях",fields:[
+      {id:"logisticsRub",label:"Логистика в Россию",suffix:"₽"},{id:"brokerRub",label:"Брокер",suffix:"₽"},
+      {id:"customsUtilRub",label:"Таможня и утиль",suffix:"₽"},{id:"deliveryRfRub",label:"Доставка по РФ",suffix:"₽"},
+      {id:"expensesRub",label:"Расходы",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},
+    ]}
+  ],
+  calc:i=>{const C=num(i.wonPerUsd)?num(i.carWon)/num(i.wonPerUsd):0,D=C*num(i.usdRate),K=D+num(i.logisticsRub)+num(i.brokerRub)+num(i.customsUtilRub)+num(i.deliveryRfRub)+num(i.expensesRub),L=K+num(i.marginRub),m=num(i.marginRub);return{client:K,total:L,marginRub:m,marginUsd:num(i.usdRate)?m/num(i.usdRate):null,breakdown:[["Автомобиль в долларах",usd(C)],["Автомобиль в рублях",rub(D)],["Логистика",rub(i.logisticsRub)],["Брокер",rub(i.brokerRub)],["Таможня и утиль",rub(i.customsUtilRub)],["Доставка по РФ",rub(i.deliveryRfRub)],["Расходы",rub(i.expensesRub)]]}}
+}
+};
+
+let state={records:[]};
+let currentDirection="Бишкек",currentRecordScope="summary",editingOrigin="default",editingId=null,editingVersion=null,editBecameStale=false,currentComment="",commentTarget=null,detailsOpen=false;
+let drafts={};
+let realtimeChannel=null;
+let refreshTimer=null;
+let currentUser=null;
+let loadingRecords=false;
+
+function dbToRecord(row){
+  return{
+    id:row.id,
+    direction:row.direction,
+    title:row.title,
+    date:row.calc_date||"",
+    status:row.status||"",
+    comment:row.comment||"",
+    inputs:row.inputs||{},
+    version:row.version||1,
+    createdAt:row.created_at||null,
+    updatedAt:row.updated_at||null,
+    createdBy:row.created_by||null,
+    updatedBy:row.updated_by||null,
+    scope:row.record_scope||"summary"
+  }
+}
+function payloadFromRecord(r){
+  const c=CONFIG[r.direction].calc(r.inputs||{});
+  return{
+    direction:r.direction,
+    title:r.title,
+    calc_date:r.date||null,
+    status:r.status||null,
+    comment:r.comment||"",
+    inputs:r.inputs||{},
+    client_total_rub:Number(c.client.toFixed(2)),
+    total_with_margin_rub:Number(c.total.toFixed(2)),
+    margin_rub:Number(c.marginRub.toFixed(2)),
+    margin_usd:c.marginUsd==null||!Number.isFinite(c.marginUsd)?null:Number(c.marginUsd.toFixed(2)),
+    formula_version:1,
+    record_scope:r.scope||currentRecordScope||"summary"
+  }
+}
+function setSync(text,kind=""){
+  const e=document.getElementById("syncState");
+  e.style.display="block";e.textContent=text;e.className="sync-state "+kind;
+}
+async function loadRecords(silent=false){
+  if(!currentUser||loadingRecords)return;
+  loadingRecords=true;
+  if(!silent)setSync("Обновляем данные…","");
+  const {data,error}=await supabaseClient
+    .from("calculations")
+    .select("*")
+    .order("updated_at",{ascending:false});
+  loadingRecords=false;
+  if(error){
+    console.error(error);
+    setSync("Ошибка синхронизации","bad");
+    if(!silent)toast("Не удалось загрузить общую базу");
+    return;
+  }
+  const freshRecords=(data||[]).map(dbToRecord);
+
+  if(editingId && editingVersion!=null){
+    const fresh=freshRecords.find(r=>r.id===editingId);
+    if(!fresh){
+      editBecameStale=true;
+      updateEditBanner();
+      toast("Открытый расчёт был удалён или стал недоступен");
+    }else if(Number(fresh.version||0)>Number(editingVersion||0)){
+      if(!editBecameStale){
+        toast("Открытый расчёт изменили с другого устройства");
+      }
+      editBecameStale=true;
+      updateEditBanner();
+    }
+  }
+
+  state.records=freshRecords;
+  renderBadge();renderSummary();renderHistory();renderAnalytics();
+  setSync("Данные синхронизированы","ok");
+}
+function persist(){renderBadge()}
+function recordCalc(r){return CONFIG[r.direction].calc(r.inputs||{})}
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.remove("show"),1600)}
+function setActiveMainTab(v){document.querySelectorAll(".main-tab").forEach(b=>b.classList.toggle("active",b.dataset.view===v))}
+function showOnlyView(id){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function updateModeUi(){
+  const isHistory=currentRecordScope==="history";
+  document.getElementById("historyModeBar").classList.toggle("show",isHistory);
+  const promote=document.getElementById("promoteEditWrap");
+  promote.classList.toggle("show",isHistory&&!!editingId);
+  if(!editingId)document.getElementById("saveBtn").textContent=isHistory?"Сохранить в историю":"Сохранить расчёт";
+  document.getElementById("newBtn").textContent=isHistory?"Новый просчёт":"Новый расчёт";
+}
+function showCalculatorForScope(scope){
+  currentRecordScope=scope==="summary"?"summary":"history";
+  setActiveMainTab("calculator");
+  showOnlyView("calculatorView");
+  updateModeUi();
+}
+function showHistoryList(){
+  currentRecordScope="history";
+  setActiveMainTab("history");
+  showOnlyView("historyListView");
+  renderHistory();
+}
+function switchView(v){
+  if(v==="calculator"){newCalc("history");return}
+  if(v==="history"){showHistoryList();return}
+  setActiveMainTab(v);
+  showOnlyView(v+"View");
+  if(v==="summary")renderSummary();
+  if(v==="analytics")renderAnalytics();
+}
+document.querySelectorAll(".main-tab").forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+
+function directionLabelHtml(d){
+  return d==="Китай через Бишкек"
+    ? '<span class="tab-main">Китай</span><span class="tab-sub">через Бишкек</span>'
+    : `<span class="tab-main">${esc(d)}</span>`;
+}
+function directionDisplay(d){
+  return d==="Китай через Бишкек"?"Китай · через Бишкек":d;
+}
+function renderDirectionTabs(){
+  const box=document.getElementById("directionTabs");box.innerHTML="";
+  for(const d of DIRECTIONS){
+    const b=document.createElement("button");
+    b.className="direction-tab"+(d===currentDirection?" active":"");
+    b.innerHTML=directionLabelHtml(d);
+    b.onclick=()=>changeDirection(d);
+    box.appendChild(b)
+  }
+  document.getElementById("directionPill").textContent=directionDisplay(currentDirection);
+}
+function getDefaults(dir){
+  const o={date:today()};for(const g of CONFIG[dir].groups)for(const f of g.fields)if(f.def!=null)o[f.id]=f.def;return o
+}
+function captureForm(){
+  const inp={date:document.getElementById("dateInput").value};
+  document.querySelectorAll("[data-field]").forEach(e=>inp[e.dataset.field]=e.type==="text"?e.value:num(e.value));
+  return{title:document.getElementById("titleInput").value,status:document.getElementById("statusInput").value,comment:currentComment,inputs:inp};
+}
+function changeDirection(d){
+  if(editingId&&d!==currentDirection){toast("У сохранённого расчёта направление не меняем");return}
+  drafts[currentDirection]=captureForm();
+  currentDirection=d;renderDirectionTabs();buildForm(drafts[d]||{title:"",status:"",comment:"",inputs:getDefaults(d)});calculate();
+}
+function buildForm(data){
+  document.getElementById("titleInput").value=data.title||"";
+  document.getElementById("dateInput").value=data.inputs?.date||data.date||today();
+  document.getElementById("statusInput").value=data.status||"";
+  currentComment=data.comment||"";updateCommentPreview();updateStatusStyle();
+  const box=document.getElementById("dynamicGroups");box.innerHTML="";
+  for(const g of CONFIG[currentDirection].groups){
+    const sec=document.createElement("section");sec.className="card";
+    const fields=g.fields.map(f=>{
+      const val=data.inputs?.[f.id]??f.def??"";
+      const type=f.type||"number";
+      const conversion=f.convertRub?`<span class="converted-value" data-convert="${esc(f.id)}">≈ 0 ₽</span>`:"";
+      return `<div class="field ${f.full?"full":""}"><label>${esc(f.label)}</label><div class="input-wrap ${f.convertRub?"has-conversion":""}"><input data-field="${esc(f.id)}" type="${type}" ${type==="number"?'step="any"':''} value="${esc(val)}">${conversion}${f.suffix?`<span class="suffix">${esc(f.suffix)}</span>`:""}</div>${f.hint?`<div class="hint">${esc(f.hint)}</div>`:""}</div>`;
+    }).join("");
+    sec.innerHTML=`<div class="section-head"><div><div class="section-title">${esc(g.title)}</div><div class="section-note">${esc(g.note||"")}</div></div><div class="pill">${esc(directionDisplay(currentDirection))}</div></div><div class="grid">${fields}</div>`;
+    box.appendChild(sec);
+  }
+  document.querySelectorAll("[data-field]").forEach(e=>e.addEventListener("input",calculate));
+}
+function updateStatusStyle(){const e=document.getElementById("statusInput");e.className="status-select status-"+(e.value||"none").replaceAll(" ","")}
+document.getElementById("statusInput").onchange=()=>{updateStatusStyle();calculate()};
+["titleInput","dateInput"].forEach(id=>document.getElementById(id).addEventListener("input",calculate));
+
+function currentInputs(){return captureForm().inputs}
+function calculate(){
+  const inputs=currentInputs();
+  if(currentDirection==="Китай через Бишкек"){
+    const rate=num(inputs.cnyRate);
+    for(const [id,value] of [
+      ["carCny",num(inputs.carCny)*rate],
+      ["deliveryBishkekCny",num(inputs.deliveryBishkekCny)*rate]
+    ]){
+      const el=document.querySelector(`[data-convert="${id}"]`);
+      if(el)el.textContent="≈ "+rub(value);
+    }
+  }
+  const c=CONFIG[currentDirection].calc(inputs);
+  document.getElementById("grandTotal").innerHTML=`${nf0.format(c.total)} <small>₽</small>`;
+  document.getElementById("clientTotal").textContent=rub(c.client);
+  document.getElementById("marginRub").textContent=rub(c.marginRub);
+  document.getElementById("marginUsd").textContent=usd(c.marginUsd);
+  document.getElementById("breakdown").innerHTML=c.breakdown.map(([k,v])=>`<div class="result-row"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("");
+  return c
+}
+function makeRecord(){
+  const d=captureForm(),old=editingId?state.records.find(r=>r.id===editingId):null;
+  return{id:editingId||uid(),direction:currentDirection,title:d.title.trim()||"Без названия",status:d.status,comment:d.comment,date:d.inputs.date||"",inputs:d.inputs,version:old?.version||1,createdAt:old?.createdAt||null,updatedAt:old?.updatedAt||null,scope:old?.scope||currentRecordScope}
+}
+async function save(){
+  const btn=document.getElementById("saveBtn");
+  btn.disabled=true;
+  const r=makeRecord();
+  const payload=payloadFromRecord(r);
+  try{
+    if(editingId){
+      const old=state.records.find(x=>x.id===editingId);
+      if(!old){toast("Расчёт уже удалён или недоступен");await loadRecords();return}
+      const expectedVersion=editingVersion;
+
+      const {data:latest,error:latestError}=await supabaseClient
+        .from("calculations")
+        .select("id,version")
+        .eq("id",editingId)
+        .maybeSingle();
+
+      if(latestError)throw latestError;
+      if(!latest || Number(latest.version)!==Number(expectedVersion)){
+        toast("Эту машину уже изменили с другого устройства. Сохранение отменено.");
+        editBecameStale=true;
+        updateEditBanner();
+        await loadRecords(true);
+        return;
+      }
+
+      const {data,error}=await supabaseClient
+        .from("calculations")
+        .update(payload)
+        .eq("id",editingId)
+        .eq("version",expectedVersion)
+        .select("*")
+        .maybeSingle();
+      if(error)throw error;
+      if(!data){
+        toast("Эту машину уже изменили с другого устройства. Твои изменения не перезаписали чужие.");
+        editingId=null;editingVersion=null;editBecameStale=false;updateEditBanner();
+        await loadRecords();switchView("summary");return;
+      }
+      toast("Изменения сохранены");
+    }else{
+      const {error}=await supabaseClient
+        .from("calculations")
+        .insert(payload);
+      if(error)throw error;
+      toast("Расчёт сохранён");
+    }
+    const savedScope=r.scope||currentRecordScope;
+    const returnToHistory=editingOrigin==="history"||savedScope==="history";
+    editingId=null;editingVersion=null;editBecameStale=false;editingOrigin="default";updateEditBanner();
+    await loadRecords(true);
+    if(returnToHistory)showHistoryList();else switchView("summary");
+  }catch(error){
+    console.error(error);
+    toast("Ошибка сохранения. Данные не потеряны в форме.");
+    setSync("Ошибка сохранения","bad");
+  }finally{
+    btn.disabled=false;
+  }
+}
+function editRecord(id,origin="default"){
+  const r=state.records.find(x=>x.id===id);if(!r)return;
+  editingOrigin=origin;
+  editingId=id;
+  editingVersion=r.version||1;
+  editBecameStale=false;
+  currentRecordScope=r.scope||"summary";
+  currentDirection=r.direction;
+  renderDirectionTabs();buildForm(r);calculate();showCalculatorForScope(currentRecordScope);updateEditBanner();window.scrollTo({top:0,behavior:"smooth"})
+}
+function newCalc(scope="history"){
+  editingOrigin="default";
+  currentRecordScope=scope==="summary"?"summary":"history";
+  editingId=null;editingVersion=null;editBecameStale=false;currentDirection="Бишкек";drafts={};renderDirectionTabs();buildForm({title:"",status:"",comment:"",inputs:getDefaults("Бишкек")});calculate();showCalculatorForScope(currentRecordScope);updateEditBanner();window.scrollTo({top:0,behavior:"smooth"})
+}
+function cancelEditing(){
+  if(editingOrigin==="history"){
+    editingOrigin="default";editingId=null;editingVersion=null;editBecameStale=false;showHistoryList();return;
+  }
+  newCalc(currentRecordScope);
+}
+function updateEditBanner(){
+  const b=document.getElementById("editBanner");
+  const danger=document.getElementById("dangerZone");
+  if(editingId){
+    const r=state.records.find(x=>x.id===editingId);
+    b.classList.add("show");
+    danger?.classList.add("show");
+    if(editBecameStale){
+      b.classList.add("stale");
+      document.getElementById("editText").textContent="⚠ Этот расчёт уже изменили с другого устройства. Твои несохранённые правки не пропадут, но сохранить поверх новой версии нельзя.";
+    }else{
+      b.classList.remove("stale");
+      document.getElementById("editText").textContent="Редактирование: "+(r?.title||"расчёт");
+    }
+    document.getElementById("saveBtn").textContent="Сохранить изменения";
+  }else{
+    b.classList.remove("show","stale");
+    danger?.classList.remove("show");
+    document.getElementById("saveBtn").textContent=currentRecordScope==="history"?"Сохранить в историю":"Сохранить расчёт";
+  }
+  updateModeUi();
+}
+
+async function deleteCurrentRecord(){
+  if(!editingId)return;
+
+  const current=state.records.find(r=>r.id===editingId);
+  const label=current?.title||"этот расчёт";
+
+  const place=current?.scope==="history"?"истории просчётов":"общей Сводки";
+  if(!confirm(`Удалить «${label}»?\n\nЗапись исчезнет из ${place} у всех пользователей. Это действие нельзя отменить из интерфейса.`)){
+    return;
+  }
+
+  const btn=document.getElementById("deleteEditBtn");
+  btn.disabled=true;
+
+  try{
+    const {data,error}=await supabaseClient
+      .from("calculations")
+      .delete()
+      .eq("id",editingId)
+      .eq("version",editingVersion)
+      .select("id")
+      .maybeSingle();
+
+    if(error)throw error;
+
+    if(!data){
+      toast("Запись уже изменили с другого устройства. Удаление отменено.");
+      editBecameStale=true;
+      updateEditBanner();
+      await loadRecords(true);
+      return;
+    }
+
+    toast("Расчёт удалён");
+    editingId=null;
+    editingVersion=null;
+    editBecameStale=false;
+    currentComment="";
+    updateEditBanner();
+    const deletedScope=current?.scope||currentRecordScope;
+    const returnToHistory=editingOrigin==="history"||deletedScope==="history";
+    editingOrigin="default";
+    await loadRecords(true);
+    if(returnToHistory)showHistoryList();else switchView("summary");
+  }catch(error){
+    console.error(error);
+    toast("Не удалось удалить расчёт");
+    setSync("Ошибка удаления","bad");
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+document.getElementById("saveBtn").onclick=save;
+document.getElementById("deleteEditBtn").onclick=deleteCurrentRecord;
+document.getElementById("newBtn").onclick=()=>newCalc("history");
+document.getElementById("newTopBtn").onclick=()=>newCalc("history");
+document.getElementById("cancelEdit").onclick=cancelEditing;
+document.getElementById("historyOpenListBtn").onclick=showHistoryList;
+document.getElementById("historyNewBtn").onclick=()=>newCalc("history");
+
+function renderBadge(){
+  document.getElementById("recordCount").textContent=state.records.filter(r=>(r.scope||"summary")==="summary").length;
+  document.getElementById("historyCount").textContent=state.records.length;
+}
+function statusHtml(s){return `<span class="status ${STATUS_CLASSES[s]||"s-none"}">${esc(s||"Без статуса")}</span>`}
+function scopeHtml(scope){
+  return scope==="history"
+    ? '<span class="scope-badge scope-history">Предварительный</span>'
+    : '<span class="scope-badge scope-summary">В Сводке</span>';
+}
+function fdate(s){if(!s)return"Без даты";const a=s.split("-");return a.length===3?`${a[2]}.${a[1]}.${a[0]}`:s}
+function getSummaryRows(){
+  const q=document.getElementById("summarySearch").value.trim().toLowerCase(),d=document.getElementById("summaryDirection").value,st=document.getElementById("summaryStatus").value;
+  return state.records.filter(r=>{
+    if((r.scope||"summary")!=="summary")return false;
+    const bag=(r.title+" "+(r.comment||"")+" "+(r.inputs?.vin||"")).toLowerCase();
+    return(!q||bag.includes(q))&&(!d||r.direction===d)&&(!st||(st==="__none"?!r.status:r.status===st))
+  })
+}
+function renderSummary(){
+  const rows=getSummaryRows(),body=document.getElementById("summaryBody");body.innerHTML="";
+  let sClient=0,sTotal=0;
+  for(const r of rows){const c=recordCalc(r);sClient+=c.client;sTotal+=c.total;const tr=document.createElement("tr");tr.innerHTML=`
+    <td>${esc(fdate(r.date))}</td>
+    <td><div class="name">${esc(r.title)}</div><div class="sub">${r.comment?esc(r.comment.slice(0,70)):"Без комментария"}</div></td>
+    <td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.total)}</td><td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div></td>
+    <td><div class="icon-actions">
+      <button class="icon-btn edit-action" data-edit="${esc(r.id)}" title="Редактировать">✎</button>
+      <button class="icon-btn comment-action" data-comment="${esc(r.id)}" title="Комментарий">💬</button>
+      <button class="icon-btn export-action" data-xls="${esc(r.id)}" title="Excel">XLS</button>
+      <button class="icon-btn pdf-action" data-pdf="${esc(r.id)}" title="PDF">PDF</button>
+    </div></td>`;body.appendChild(tr)}
+  document.getElementById("summaryEmpty").style.display=rows.length?"none":"block";
+  document.getElementById("sumCount").textContent=rows.length;document.getElementById("sumClient").textContent=rub(sClient);document.getElementById("sumTotal").textContent=rub(sTotal);
+  body.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editRecord(b.dataset.edit));body.querySelectorAll("[data-comment]").forEach(b=>b.onclick=()=>openComment(b.dataset.comment));body.querySelectorAll("[data-xls]").forEach(b=>b.onclick=()=>exportSingleExcel(state.records.find(r=>r.id===b.dataset.xls)));body.querySelectorAll("[data-pdf]").forEach(b=>b.onclick=()=>printSingle(state.records.find(r=>r.id===b.dataset.pdf)));
+  renderMobileSummary(rows)
+}
+function renderMobileSummary(rows){
+  const box=document.getElementById("summaryMobile");box.innerHTML=rows.length?"":"<div class='empty'>Нет записей.</div>";
+  for(const r of rows){const c=recordCalc(r);const x=document.createElement("div");x.className="mcard";x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div>${statusHtml(r.status)}</div><div class="mcard-grid"><div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div><div><div class="k">С маржой</div><div class="v">${rub(c.total)}</div></div><div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div></div><div class="mobile-actions">
+          <button class="btn small mobile-edit" data-medit="${esc(r.id)}">✎ Изменить</button>
+          <button class="btn small mobile-comment" data-mcomment="${esc(r.id)}">💬 Коммент.</button>
+          <button class="btn small mobile-export" data-mxls="${esc(r.id)}">XLS</button>
+          <button class="btn small mobile-pdf" data-mpdf="${esc(r.id)}">PDF</button>
+        </div></div>`;box.appendChild(x)}
+  box.querySelectorAll("[data-medit]").forEach(b=>b.onclick=()=>editRecord(b.dataset.medit));
+  box.querySelectorAll("[data-mcomment]").forEach(b=>b.onclick=()=>openComment(b.dataset.mcomment));
+  box.querySelectorAll("[data-mxls]").forEach(b=>b.onclick=()=>exportSingleExcel(state.records.find(r=>r.id===b.dataset.mxls)));
+  box.querySelectorAll("[data-mpdf]").forEach(b=>b.onclick=()=>printSingle(state.records.find(r=>r.id===b.dataset.mpdf)))
+}
+["summarySearch","summaryDirection","summaryStatus"].forEach(id=>document.getElementById(id).addEventListener(id==="summarySearch"?"input":"change",renderSummary));
+
+
+function getHistoryRows(){
+  const q=document.getElementById("historySearch").value.trim().toLowerCase();
+  const d=document.getElementById("historyDirection").value;
+  const scope=document.getElementById("historyScope").value;
+  return state.records.filter(r=>{
+    const actualScope=r.scope||"summary";
+    const bag=(r.title+" "+(r.comment||"")+" "+(r.inputs?.vin||"")).toLowerCase();
+    return(!q||bag.includes(q))&&(!d||r.direction===d)&&(!scope||actualScope===scope)
+  })
+}
+function renderHistory(){
+  const rows=getHistoryRows();
+  const body=document.getElementById("historyBody");
+  if(!body)return;
+  body.innerHTML="";
+  for(const r of rows){
+    const c=recordCalc(r),tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${esc(fdate(r.date))}</td>
+      <td><div class="name">${esc(r.title)}</div><div class="sub">${r.comment?esc(r.comment.slice(0,70)):"Без комментария"}</div></td>
+      <td>${esc(r.direction)}</td>
+      <td>${scopeHtml(r.scope||"summary")}</td>
+      <td>${statusHtml(r.status)}</td>
+      <td class="money">${rub(c.client)}</td>
+      <td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div></td>
+      <td><div class="icon-actions">
+        <button class="icon-btn edit-action" data-hedit="${esc(r.id)}" title="Редактировать">✎</button>
+        <button class="icon-btn comment-action" data-hcomment="${esc(r.id)}" title="Комментарий">💬</button>
+        ${(r.scope||"summary")==="history"?`<button class="icon-btn promote-action" data-promote="${esc(r.id)}" title="Отправить в Сводку">→</button>`:""}
+        <button class="icon-btn export-action" data-hxls="${esc(r.id)}" title="Excel">XLS</button>
+        <button class="icon-btn pdf-action" data-hpdf="${esc(r.id)}" title="PDF">PDF</button>
+      </div></td>`;
+    body.appendChild(tr)
+  }
+  document.getElementById("historyVisibleCount").textContent=rows.length;
+  document.getElementById("historyEmpty").style.display=rows.length?"none":"block";
+  body.querySelectorAll("[data-hedit]").forEach(b=>b.onclick=()=>editRecord(b.dataset.hedit,"history"));
+  body.querySelectorAll("[data-hcomment]").forEach(b=>b.onclick=()=>openComment(b.dataset.hcomment));
+  body.querySelectorAll("[data-promote]").forEach(b=>b.onclick=()=>promoteRecordToSummary(b.dataset.promote));
+  body.querySelectorAll("[data-hxls]").forEach(b=>b.onclick=()=>exportSingleExcel(state.records.find(r=>r.id===b.dataset.hxls)));
+  body.querySelectorAll("[data-hpdf]").forEach(b=>b.onclick=()=>printSingle(state.records.find(r=>r.id===b.dataset.hpdf)));
+  renderMobileHistory(rows);
+}
+function renderMobileHistory(rows){
+  const box=document.getElementById("historyMobile");
+  if(!box)return;
+  box.innerHTML=rows.length?"":"<div class='empty'>В истории пока нет подходящих просчётов.</div>";
+  for(const r of rows){
+    const c=recordCalc(r),x=document.createElement("div");
+    x.className="mcard";
+    x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${scopeHtml(r.scope||"summary")}${statusHtml(r.status)}</div></div>
+      <div class="mcard-grid">
+        <div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div>
+        <div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div></div>
+        <div class="mobile-actions">
+          <button class="btn small mobile-edit" data-hmedit="${esc(r.id)}">✎ Изменить</button>
+          ${(r.scope||"summary")==="history"?`<button class="btn small promote-action" data-hmpromote="${esc(r.id)}">→ В Сводку</button>`:""}
+          <button class="btn small mobile-comment" data-hmcomment="${esc(r.id)}">💬 Коммент.</button>
+          <button class="btn small mobile-export" data-hmxls="${esc(r.id)}">XLS</button>
+        </div>
+      </div>`;
+    box.appendChild(x)
+  }
+  box.querySelectorAll("[data-hmedit]").forEach(b=>b.onclick=()=>editRecord(b.dataset.hmedit,"history"));
+  box.querySelectorAll("[data-hmpromote]").forEach(b=>b.onclick=()=>promoteRecordToSummary(b.dataset.hmpromote));
+  box.querySelectorAll("[data-hmcomment]").forEach(b=>b.onclick=()=>openComment(b.dataset.hmcomment));
+  box.querySelectorAll("[data-hmxls]").forEach(b=>b.onclick=()=>exportSingleExcel(state.records.find(r=>r.id===b.dataset.hmxls)));
+}
+async function promoteRecordToSummary(id){
+  const r=state.records.find(x=>x.id===id);
+  if(!r||r.scope!=="history")return;
+  if(!confirm(`Отправить «${r.title}» в Сводку?\n\nПосле этого расчёт начнёт учитываться в «Сводке» и «Итогах».`))return;
+  try{
+    const {data,error}=await supabaseClient
+      .from("calculations")
+      .update({record_scope:"summary"})
+      .eq("id",r.id)
+      .eq("version",r.version)
+      .select("*")
+      .maybeSingle();
+    if(error)throw error;
+    if(!data){toast("Просчёт уже изменили с другого устройства");await loadRecords(true);return}
+    toast("Просчёт отправлен в Сводку");
+    await loadRecords(true);
+    showHistoryList();
+  }catch(error){
+    console.error(error);
+    toast("Не удалось отправить просчёт в Сводку");
+  }
+}
+async function promoteCurrentToSummary(){
+  if(!editingId)return;
+  const r=makeRecord();
+  if(r.scope!=="history")return;
+  if(!confirm(`Сохранить текущие изменения и отправить «${r.title}» в Сводку?\n\nПосле этого расчёт начнёт учитываться в «Сводке» и «Итогах».`))return;
+  const btn=document.getElementById("promoteEditBtn");
+  btn.disabled=true;
+  try{
+    const expectedVersion=editingVersion;
+    const payload={...payloadFromRecord(r),record_scope:"summary"};
+    const {data,error}=await supabaseClient
+      .from("calculations")
+      .update(payload)
+      .eq("id",editingId)
+      .eq("version",expectedVersion)
+      .select("*")
+      .maybeSingle();
+    if(error)throw error;
+    if(!data){
+      toast("Просчёт уже изменили с другого устройства. Отправка отменена.");
+      editBecameStale=true;updateEditBanner();await loadRecords(true);return;
+    }
+    toast("Сохранено и отправлено в Сводку");
+    editingId=null;editingVersion=null;editBecameStale=false;editingOrigin="default";currentRecordScope="summary";
+    updateEditBanner();
+    await loadRecords(true);
+    switchView("summary");
+  }catch(error){
+    console.error(error);
+    toast("Не удалось отправить просчёт в Сводку");
+  }finally{
+    btn.disabled=false;
+  }
+}
+document.getElementById("promoteEditBtn").onclick=promoteCurrentToSummary;
+["historySearch","historyDirection","historyScope"].forEach(id=>document.getElementById(id).addEventListener(id==="historySearch"?"input":"change",renderHistory));
+
+function analyticsRows(){
+  const from=document.getElementById("anFrom").value,to=document.getElementById("anTo").value,d=document.getElementById("anDirection").value,st=document.getElementById("anStatus").value;
+  return state.records.filter(r=>{
+    if((r.scope||"summary")!=="summary")return false;
+    if(from&&(!r.date||r.date<from))return false;if(to&&(!r.date||r.date>to))return false;if(d&&r.direction!==d)return false;if(st&&(st==="__none"?!!r.status:r.status!==st))return false;return true
+  })
+}
+function renderAnalytics(){
+  const rows=analyticsRows(),st=document.getElementById("anStatus").value;let mr=0,mu=0,missing=0,usdCount=0;
+  for(const r of rows){
+    const c=recordCalc(r);
+    mr+=c.marginRub;
+    if(c.marginUsd==null||!Number.isFinite(c.marginUsd))missing++;
+    else{mu+=c.marginUsd;usdCount++}
+  }
+  const avgRub=rows.length?mr/rows.length:0;
+  const avgUsd=usdCount?mu/usdCount:null;
+  document.getElementById("anCount").textContent=rows.length;
+  document.getElementById("anCountLabel").textContent=st&&st!=="__none"?st:"Машин";
+  document.getElementById("anMarginRub").textContent=rub(mr);
+  document.getElementById("anMarginUsd").textContent=usd(mu);
+  document.getElementById("anAvgMarginRub").textContent=rub(avgRub);
+  document.getElementById("anAvgMarginUsd").textContent=usd(avgUsd);
+  document.getElementById("anAvgUsdNote").textContent=usdCount?`Среднее по ${usdCount} расчёт(ам) с доступным курсом`:"Нет расчётов с доступным курсом";
+  const f=document.getElementById("anFrom").value,t=document.getElementById("anTo").value;document.getElementById("anPeriodText").textContent=f||t?`${f?fdate(f):"начало"} → ${t?fdate(t):"сегодня"}`:"За всё время";
+  document.getElementById("anUsdNote").textContent=missing?`Для ${missing} расчёт(ов) нет USD/RUB для маржи`:"По всем выбранным расчётам";
+  document.getElementById("detailsToggle").textContent=(detailsOpen?"Скрыть машины":"Показать машины")+" · "+rows.length;
+  if(detailsOpen)renderDetails(rows)
+}
+function renderDetails(rows){
+  const b=document.getElementById("detailsBody");b.innerHTML="";
+  for(const r of rows){const c=recordCalc(r),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(fdate(r.date))}</td><td><div class="name">${esc(r.title)}</div></td><td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.marginRub)}</td><td class="money">${usd(c.marginUsd)}</td><td><button class="icon-btn" data-dedit="${esc(r.id)}">✎</button></td>`;b.appendChild(tr)}
+  document.getElementById("detailsEmpty").style.display=rows.length?"none":"block";b.querySelectorAll("[data-dedit]").forEach(x=>x.onclick=()=>editRecord(x.dataset.dedit))
+}
+["anFrom","anTo","anDirection","anStatus"].forEach(id=>document.getElementById(id).addEventListener("change",renderAnalytics));
+document.getElementById("detailsToggle").onclick=()=>{detailsOpen=!detailsOpen;document.getElementById("detailsCard").style.display=detailsOpen?"block":"none";renderAnalytics()};
+document.getElementById("allTime").onclick=()=>{document.getElementById("anFrom").value="";document.getElementById("anTo").value="";renderAnalytics()};
+document.getElementById("thisMonth").onclick=()=>{const d=new Date(),y=d.getFullYear(),m=d.getMonth()+1;document.getElementById("anFrom").value=`${y}-${String(m).padStart(2,"0")}-01`;document.getElementById("anTo").value=today();renderAnalytics()};
+document.getElementById("prevMonth").onclick=()=>{const d=new Date(),first=new Date(d.getFullYear(),d.getMonth()-1,1),last=new Date(d.getFullYear(),d.getMonth(),0);const iso=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;document.getElementById("anFrom").value=iso(first);document.getElementById("anTo").value=iso(last);renderAnalytics()};
+
+function updateCommentPreview(){document.getElementById("commentPreview").textContent=currentComment||"Комментария нет"}
+function openComment(id){
+  commentTarget=id||"__draft";
+  const r=id&&id!=="__draft"?state.records.find(x=>x.id===id):null;
+  document.getElementById("commentModalSub").textContent=r?r.title:"Комментарий к текущему расчёту";
+  document.getElementById("commentText").value=r?.comment??currentComment;
+  document.getElementById("commentModal").classList.add("show");document.getElementById("commentText").focus()
+}
+function closeComment(){document.getElementById("commentModal").classList.remove("show")}
+document.getElementById("commentDraftBtn").onclick=()=>openComment("__draft");document.getElementById("commentCancel").onclick=closeComment;
+document.getElementById("commentSave").onclick=async()=>{
+  const txt=document.getElementById("commentText").value.trim();
+  if(commentTarget==="__draft"){
+    currentComment=txt;updateCommentPreview();closeComment();toast("Комментарий добавлен к форме");return;
+  }
+  const r=state.records.find(x=>x.id===commentTarget);
+  if(!r){closeComment();return}
+  const {data,error}=await supabaseClient
+    .from("calculations")
+    .update({comment:txt})
+    .eq("id",r.id)
+    .eq("version",r.version)
+    .select("*")
+    .maybeSingle();
+  closeComment();
+  if(error){console.error(error);toast("Не удалось сохранить комментарий");return}
+  if(!data){toast("Запись уже изменили с другого устройства");await loadRecords();return}
+  toast("Комментарий сохранён");await loadRecords(true);
+};
+document.getElementById("commentModal").onclick=e=>{if(e.target.id==="commentModal")closeComment()};
+
+function saveBlob(content,name,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+function safeName(s){return String(s||"raschet").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"raschet"}
+function excelHtml(title,headers,rows){
+  const table=`<table border="1"><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr>${rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</table>`;
+  return `\ufeff<html><head><meta charset="UTF-8"></head><body><h2>${esc(title)}</h2>${table}</body></html>`
+}
+function recordRows(r){
+  const c=recordCalc(r),rows=[["Направление",r.direction],["Автомобиль / клиент",r.title],["Дата",r.date||""],["Статус",r.status||""],["Комментарий",r.comment||""]];
+  for(const g of CONFIG[r.direction].groups)for(const f of g.fields)rows.push([f.label,r.inputs?.[f.id]??""]);
+  rows.push(["Итого для клиента",Math.round(c.client*100)/100],["Итого с маржой",Math.round(c.total*100)/100],["Маржа ₽",Math.round(c.marginRub*100)/100],["Маржа $",c.marginUsd==null?"":Math.round(c.marginUsd*100)/100]);
+  return rows
+}
+function exportSingleExcel(r){if(!r)r=makeRecord();saveBlob(excelHtml("Расчёт "+r.title,["Поле","Значение"],recordRows(r)),safeName(r.title)+".xls","application/vnd.ms-excel")}
+function exportSummaryExcel(){
+  const rows=getSummaryRows().map(r=>{const c=recordCalc(r);return[r.date||"",r.title,r.direction,r.status||"",r.comment||"",Math.round(c.client),Math.round(c.total),Math.round(c.marginRub),c.marginUsd==null?"":Math.round(c.marginUsd*100)/100]});
+  saveBlob(excelHtml("Сводка",["Дата","Автомобиль","Направление","Статус","Комментарий","Для клиента ₽","С маржой ₽","Маржа ₽","Маржа $"],rows),"svodka.xls","application/vnd.ms-excel")
+}
+function printHtml(title,body){
+  const w=window.open("","_blank");if(!w){toast("Разреши всплывающие окна для PDF");return}
+  w.document.write(`<html><head><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#111}h1{font-size:22px}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #ddd;padding:8px;text-align:left;font-size:12px}th{background:#f3f4f6}
+.brand-by{
+  color:#16a36f;
+  font-weight:850;
+}
+.direction-tab.active{
+  background:linear-gradient(135deg,#171a20,#242a34);
+  box-shadow:0 6px 18px rgba(23,26,32,.12);
+}
+.result-top{
+  background:linear-gradient(135deg,#16191f 0%,#1b2522 100%);
+}
+.margin-box{
+  background:#eefaf4;
+  border:1px solid #cceedd;
+}
+.margin-box .k{
+  color:#4e7c67;
+}
+.margin-box .v{
+  color:#087a52;
+}
+.analytics-card:nth-child(2),
+.analytics-card:nth-child(3){
+  background:#f2fbf6;
+  border-color:#cfeede;
+}
+.analytics-card:nth-child(2) .v,
+.analytics-card:nth-child(3) .v{
+  color:#087a52;
+}
+.stat:nth-child(3){
+  background:#f3fbf7;
+  border-color:#d0ecdd;
+}
+.stat:nth-child(3) .stat-v{
+  color:#087a52;
+}
+.btn.primary{
+  background:linear-gradient(135deg,#171a20,#252b34);
+}
+.icon-btn{
+  background:#f4f6f8;
+  border-color:#d9dde3;
+  color:#2e3440;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.icon-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+.icon-btn.edit-action{
+  background:#eef4ff;
+  border-color:#c7d7fa;
+  color:#2256b8;
+}
+.icon-btn.comment-action{
+  background:#fff7e8;
+  border-color:#f2d7a6;
+  color:#9b5f07;
+}
+.icon-btn.export-action{
+  background:#eefaf4;
+  border-color:#bfe6d1;
+  color:#087a52;
+}
+.icon-btn.pdf-action{
+  background:#fff0f0;
+  border-color:#f2c6c6;
+  color:#b42318;
+}
+.result-row strong{
+  color:#272c34;
+}
+.status{
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.025);
+}
+.mobile-actions{
+  grid-column:1/-1;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:2px;
+}
+.mobile-actions .btn{
+  min-height:34px;
+}
+.mobile-edit{
+  background:#eef4ff;
+  border-color:#c7d7fa;
+  color:#2256b8;
+}
+.mobile-comment{
+  background:#fff7e8;
+  border-color:#f2d7a6;
+  color:#9b5f07;
+}
+.mobile-export{
+  background:#eefaf4;
+  border-color:#bfe6d1;
+  color:#087a52;
+}
+.mobile-pdf{
+  background:#fff0f0;
+  border-color:#f2c6c6;
+  color:#b42318;
+}
+@media(max-width:720px){
+  .header .btn{width:100%}
+  .direction-tabs{
+    flex-wrap:nowrap;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-bottom:0;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+    overscroll-behavior-y:none;
+  }
+  .direction-tabs::-webkit-scrollbar{display:none}
+  .direction-tab{flex:0 0 auto}
+  .comment-line{align-items:stretch}
+  .comment-line .btn{width:100%}
+  .comment-preview{width:100%;white-space:normal}
+  .summary-stats{gap:8px}
+  .stat{padding:13px}
+  .mobile-actions .btn{flex:1 1 calc(50% - 6px)}
+}
+
+</style></head><body><h1>${esc(title)}</h1>${body}</body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),250)
+}
+function printSingle(r){if(!r)r=makeRecord();const rows=recordRows(r);printHtml("Расчёт "+r.title,`<table>${rows.map(x=>`<tr><th>${esc(x[0])}</th><td>${esc(x[1])}</td></tr>`).join("")}</table>`)}
+function printSummary(){const rows=getSummaryRows();printHtml("Сводка расчётов",`<table><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th></tr>${rows.map(r=>{const c=recordCalc(r);return`<tr><td>${esc(fdate(r.date))}</td><td>${esc(r.title)}</td><td>${esc(r.direction)}</td><td>${esc(r.status||"")}</td><td>${rub(c.client)}</td><td>${rub(c.total)}</td><td>${rub(c.marginRub)} / ${usd(c.marginUsd)}</td></tr>`}).join("")}</table>`)}
+document.getElementById("singleExcelBtn").onclick=()=>exportSingleExcel();document.getElementById("singlePdfBtn").onclick=()=>printSingle();document.getElementById("summaryExcelBtn").onclick=exportSummaryExcel;document.getElementById("summaryPdfBtn").onclick=printSummary;
+
+
+function loginToEmail(login){
+  const v=(login||"").trim().toLowerCase();
+  return v.includes("@")?v:v+LOGIN_DOMAIN;
+}
+function displayLogin(user){
+  return (user?.email||"user").split("@")[0];
+}
+function showLogin(){
+  currentUser=null;
+  document.getElementById("appPage").style.display="none";
+  document.getElementById("loginShell").style.display="flex";
+  document.getElementById("syncState").style.display="none";
+}
+async function enterApp(user){
+  currentUser=user;
+  document.getElementById("loginShell").style.display="none";
+  document.getElementById("appPage").style.display="block";
+  document.getElementById("userChip").textContent="@" + displayLogin(user);
+  currentRecordScope="history";editingOrigin="default";
+  renderDirectionTabs();
+  buildForm({title:"",status:"",comment:"",inputs:getDefaults("Бишкек")});
+  calculate();showCalculatorForScope("history");updateEditBanner();
+  await loadRecords();
+  subscribeRealtime();
+}
+async function doLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById("loginBtn");
+  const err=document.getElementById("loginError");
+  btn.disabled=true;err.textContent="";
+  const email=loginToEmail(document.getElementById("loginInput").value);
+  const password=document.getElementById("passwordInput").value;
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  btn.disabled=false;
+  if(error||!data?.user){
+    err.textContent="Неверный логин или пароль.";
+    return;
+  }
+  document.getElementById("passwordInput").value="";
+}
+function subscribeRealtime(){
+  if(realtimeChannel)supabaseClient.removeChannel(realtimeChannel);
+  realtimeChannel=supabaseClient
+    .channel("forangge-calculations")
+    .on("postgres_changes",{event:"*",schema:"public",table:"calculations"},payload=>{
+      if(
+        editingId &&
+        payload?.new?.id===editingId &&
+        Number(payload?.new?.version||0)>Number(editingVersion||0)
+      ){
+        editBecameStale=true;
+        updateEditBanner();
+        toast("Открытый расчёт изменили с другого устройства");
+      }
+      loadRecords(true);
+    })
+    .subscribe(status=>{
+      if(status==="SUBSCRIBED")setSync("Онлайн · общая база","ok");
+    });
+  clearInterval(refreshTimer);
+  refreshTimer=setInterval(()=>loadRecords(true),5000);
+}
+document.getElementById("loginForm").addEventListener("submit",doLogin);
+document.getElementById("logoutBtn").onclick=async()=>{
+  if(realtimeChannel){await supabaseClient.removeChannel(realtimeChannel);realtimeChannel=null}
+  clearInterval(refreshTimer);
+  await supabaseClient.auth.signOut();
+};
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&currentUser)loadRecords(true)});
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+  if(session?.user){
+    if(!currentUser||currentUser.id!==session.user.id)enterApp(session.user);
+  }else{
+    showLogin();
+  }
+});
+(async()=>{
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session?.user)await enterApp(session.user);
+  else showLogin();
+})();
+
+</script>
+</body></html>
