@@ -44,7 +44,7 @@ input:focus,select:focus,textarea:focus{border-color:#91a7d5;box-shadow:0 0 0 4p
 .input-wrap{position:relative}.input-wrap input{padding-right:52px}.suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:#8e949d;pointer-events:none}
 .hint{font-size:10px;color:#9aa0a8;margin-top:5px;line-height:1.35}
 .common-card{margin-bottom:14px}
-.status-select.status-Выдан{border-color:#86d5b4;background:#f1fbf7}.status-select.status-Впути{border-color:#aac3f4;background:#f4f7ff}.status-select.status-Вброни{border-color:#f6cd91;background:#fff9ee}.status-select.status-Возврат{border-color:#f1abab;background:#fff5f5}
+.status-select.status-Выдан{border-color:#86d5b4;background:#f1fbf7}.status-select.status-Впути{border-color:#aac3f4;background:#f4f7ff}.status-select.status-Вброни{border-color:#f6cd91;background:#fff9ee}.status-select.status-Приехала{border-color:#c8b5f3;background:#f7f3ff}.status-select.status-Возврат{border-color:#f1abab;background:#fff5f5}
 .comment-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.comment-preview{font-size:12px;color:#737a85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:130px}
 .result-card{position:sticky;top:16px;padding:0;overflow:hidden}.result-top{background:#16191f;color:#fff;padding:21px}
 .result-label{text-transform:uppercase;letter-spacing:.08em;color:#b9c0ca;font-weight:750;font-size:10px}
@@ -53,7 +53,7 @@ input:focus,select:focus,textarea:focus{border-color:#91a7d5;box-shadow:0 0 0 4p
 .result-secondary .k{font-size:11px;color:#b9c0ca}.result-secondary .v{font-size:22px;font-weight:800;margin-top:4px}
 .result-body{padding:16px 19px 19px}.result-row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #eef0f3;font-size:12px}
 .result-row:last-child{border:0}.result-row span:first-child{color:#777e88;max-width:62%}.result-row strong{text-align:right}
-.margin-box{display:grid;grid-template-columns:1fr 1fr;gap:9px;background:#f6f8fb;border-radius:13px;padding:12px;margin-top:12px}
+.margin-box{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;background:#f6f8fb;border-radius:13px;padding:12px;margin-top:12px}
 .margin-box .k{font-size:10px;color:#8c939e}.margin-box .v{font-size:15px;font-weight:800;margin-top:3px}
 .actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .edit-banner{display:none;background:#fff1f1;border:1px solid #ef9a9a;border-radius:13px;padding:10px 12px;color:#a61b1b;font-size:12px;font-weight:700;align-items:center;justify-content:space-between;gap:10px}.edit-banner.show{display:flex}.edit-banner.stale{background:#fff7ed;border-color:#fdba74;color:#9a3412}
@@ -65,12 +65,12 @@ input:focus,select:focus,textarea:focus{border-color:#91a7d5;box-shadow:0 0 0 4p
 th,td{padding:12px 13px;text-align:left;border-bottom:1px solid #eef0f3;vertical-align:middle}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#828a95;background:#fafbfc}td{font-size:12px}
 tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;color:#9399a3;margin-top:3px}.money{font-weight:750;white-space:nowrap}
 .status{display:inline-flex;align-items:center;border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800;white-space:nowrap}
-.s-Выдан{background:#e9f8f1;color:#087a52}.s-Впути{background:#edf3ff;color:#2459bd}.s-Вброни{background:#fff3df;color:#a85b00}.s-Возврат{background:#feecec;color:#b42318}.s-none{background:#f0f2f4;color:#6e7580}
+.s-Выдан{background:#e9f8f1;color:#087a52}.s-Впути{background:#edf3ff;color:#2459bd}.s-Вброни{background:#fff3df;color:#a85b00}.s-Приехала{background:#f1ebff;color:#6941c6}.s-Возврат{background:#feecec;color:#b42318}.s-none{background:#f0f2f4;color:#6e7580}
 .icon-actions{display:flex;gap:5px;align-items:center}.icon-btn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800}.icon-btn:hover{background:#f5f6f8}
 .empty{padding:36px 18px;text-align:center;color:#9198a2;font-size:12px}
 .kpi-title{font-size:24px;font-weight:850;letter-spacing:-.03em;margin-bottom:4px}.kpi-sub{font-size:12px;color:var(--muted)}
 .period-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.quick-periods{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
-.analytics-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-top:14px}.analytics-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:17px}.analytics-card .k{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#89919b;font-weight:750}.analytics-card .v{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:7px}.analytics-card .note{font-size:10px;color:#989ea7;margin-top:6px}
+.analytics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:14px}.analytics-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:17px}.analytics-card .k{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#89919b;font-weight:750}.analytics-card .v{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:7px}.analytics-card .note{font-size:10px;color:#989ea7;margin-top:6px}
 .detail-toggle{margin-top:14px;display:flex;justify-content:flex-end}
 .modal-bg{position:fixed;inset:0;background:rgba(17,24,39,.38);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal-bg.show{display:flex}
 .modal{background:#fff;border-radius:18px;border:1px solid var(--line);width:min(600px,100%);box-shadow:0 24px 80px rgba(0,0,0,.18);padding:20px}.modal-title{font-size:19px;font-weight:850;margin-bottom:5px}.modal-sub{font-size:11px;color:#868d97;margin-bottom:13px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
@@ -402,6 +402,42 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
   .input-wrap.has-conversion input{padding-right:52px}
 }
 
+
+.status-multi{position:relative;min-width:175px}
+.status-multi-btn{
+  width:100%;height:44px;padding:0 11px;border:1px solid #dfe3e8;background:#fff;
+  border-radius:11px;color:#17191d;display:flex;align-items:center;justify-content:space-between;
+  gap:10px;cursor:pointer;font:inherit;text-align:left
+}
+.status-multi-btn:hover{background:#fafbfc}
+.status-multi.open .status-multi-btn{border-color:#91a7d5;box-shadow:0 0 0 4px rgba(37,99,235,.07)}
+.status-multi-arrow{font-size:11px;color:#8e949d;transition:.15s}
+.status-multi.open .status-multi-arrow{transform:rotate(180deg)}
+.status-multi-menu{
+  display:none;position:absolute;left:0;top:calc(100% + 6px);z-index:80;width:max-content;min-width:100%;
+  max-width:260px;background:#fff;border:1px solid #dfe3e8;border-radius:12px;padding:6px;
+  box-shadow:0 16px 40px rgba(17,24,39,.14)
+}
+.status-multi.open .status-multi-menu{display:block}
+.status-multi-option{
+  display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;
+  font-size:12px;font-weight:650;color:#414752;cursor:pointer;margin:0
+}
+.status-multi-option:hover{background:#f6f7f9}
+.status-multi-option input{width:16px;height:16px;margin:0;padding:0;accent-color:#171a20}
+.status-multi-reset{
+  width:100%;border:0;border-top:1px solid #eef0f3;background:#fff;margin-top:4px;padding:8px;
+  font-size:11px;color:#727984;cursor:pointer;text-align:left
+}
+.status-multi-reset:hover{color:#17191d}
+.tether-sub{color:#6b5ab5!important;font-weight:750}
+@media(max-width:720px){
+  .margin-box{grid-template-columns:1fr 1fr}
+  .margin-box>div:last-child{grid-column:1/-1}
+  .status-multi{width:100%;min-width:0}
+  .status-multi-menu{width:100%;max-width:none}
+}
+
 </style>
 </head>
 <body>
@@ -427,7 +463,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
 <div class="page" id="appPage">
   <div class="header">
     <div>
-      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.16</span></div>
+      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.17</span></div>
       <h1>Автокалькулятор <span class="brand-by">by forangge</span></h1>
       <p class="subtitle">Бишкек, Харгос, Китай, Китай через Бишкек и Корея в одном интерфейсе.</p>
     </div>
@@ -471,7 +507,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
             <div class="field full"><label>Марка авто, клиент, телефон</label><input id="titleInput" placeholder="Например: GAC S7 · Алексей · 3723"></div>
             <div class="field"><label>Дата расчёта</label><input id="dateInput" type="date"></div>
             <div class="field"><label>Статус</label><select id="statusInput" class="status-select">
-              <option value="">Без статуса</option><option>В брони</option><option>В пути</option><option>Выдан</option><option>Возврат</option>
+              <option value="">Без статуса</option><option>В брони</option><option>В пути</option><option>Приехала</option><option>Выдан</option><option>Возврат</option>
             </select></div>
             <div class="field full">
               <label>Комментарий</label>
@@ -494,6 +530,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
           <div class="margin-box">
             <div class="margin-primary"><div class="k">Маржа</div><div class="v" id="marginRub">0 ₽</div></div>
             <div><div class="k">Маржа в долларах</div><div class="v" id="marginUsd">$0</div></div>
+            <div><div class="k">Tether</div><div class="v" id="marginTether">—</div></div>
           </div>
           <div class="actions-grid">
             <button class="btn primary" id="saveBtn">Сохранить расчёт</button>
@@ -526,6 +563,18 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
       <input class="grow" id="historySearch" placeholder="Поиск по машине, клиенту, телефону, VIN или комментарию">
       <select id="historyDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select>
       <select id="historyScope"><option value="">Все просчёты</option><option value="history">Предварительные</option><option value="summary">В Сводке</option></select>
+      <div class="status-multi" id="historyStatusMulti">
+        <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
+        <div class="status-multi-menu">
+          <label class="status-multi-option"><input type="checkbox" value="В брони"><span>В брони</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="В пути"><span>В пути</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Приехала"><span>Приехала</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Выдан"><span>Выдан</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Возврат"><span>Возврат</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="__none"><span>Без статуса</span></label>
+          <button type="button" class="status-multi-reset">Сбросить статусы</button>
+        </div>
+      </div>
     </div>
     <div class="summary-stats history-count-stat">
       <div class="stat"><div class="stat-k">Просчётов в истории</div><div class="stat-v" id="historyVisibleCount">0</div></div>
@@ -543,7 +592,18 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
     <div class="toolbar">
       <input class="grow" id="summarySearch" placeholder="Поиск по машине, клиенту, телефону, VIN или комментарию">
       <select id="summaryDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select>
-      <select id="summaryStatus"><option value="">Все статусы</option><option>В брони</option><option>В пути</option><option>Выдан</option><option>Возврат</option><option value="__none">Без статуса</option></select>
+      <div class="status-multi" id="summaryStatusMulti">
+        <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
+        <div class="status-multi-menu">
+          <label class="status-multi-option"><input type="checkbox" value="В брони"><span>В брони</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="В пути"><span>В пути</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Приехала"><span>Приехала</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Выдан"><span>Выдан</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Возврат"><span>Возврат</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="__none"><span>Без статуса</span></label>
+          <button type="button" class="status-multi-reset">Сбросить статусы</button>
+        </div>
+      </div>
       <button class="btn" id="summaryExcelBtn">Выгрузить Excel</button>
       <button class="btn" id="summaryPdfBtn">Выгрузить PDF</button>
     </div>
@@ -564,13 +624,24 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
   <section class="view" id="analyticsView">
     <section class="card">
       <div class="kpi-title">Итоги</div>
-      <div class="kpi-sub">Можно указать любой период по дням, направление и любой статус. Пустые даты не попадают в фильтрованный период.</div>
+      <div class="kpi-sub">Можно указать любой период по дням, направление и выбрать сразу несколько статусов. Пустые даты не попадают в фильтрованный период.</div>
       <div style="height:16px"></div>
       <div class="period-grid">
         <div><label>Дата от</label><input id="anFrom" type="date"></div>
         <div><label>Дата до</label><input id="anTo" type="date"></div>
         <div><label>Направление</label><select id="anDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select></div>
-        <div><label>Статус</label><select id="anStatus"><option value="">Все статусы</option><option>В брони</option><option>В пути</option><option>Выдан</option><option>Возврат</option><option value="__none">Без статуса</option></select></div>
+        <div><label>Статусы</label><div class="status-multi" id="anStatusMulti">
+        <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
+        <div class="status-multi-menu">
+          <label class="status-multi-option"><input type="checkbox" value="В брони"><span>В брони</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="В пути"><span>В пути</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Приехала"><span>Приехала</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Выдан"><span>Выдан</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="Возврат"><span>Возврат</span></label>
+          <label class="status-multi-option"><input type="checkbox" value="__none"><span>Без статуса</span></label>
+          <button type="button" class="status-multi-reset">Сбросить статусы</button>
+        </div>
+      </div></div>
       </div>
       <div class="quick-periods"><button class="btn small" id="thisMonth">Этот месяц</button><button class="btn small" id="prevMonth">Прошлый месяц</button><button class="btn small" id="allTime">За всё время</button></div>
 
@@ -578,15 +649,17 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
         <div class="analytics-card"><div class="k" id="anCountLabel">Машин</div><div class="v" id="anCount">0</div><div class="note" id="anPeriodText">За всё время</div></div>
         <div class="analytics-card"><div class="k">Маржа в рублях</div><div class="v" id="anMarginRub">0 ₽</div><div class="note">Сумма маржи по выбранным машинам</div></div>
         <div class="analytics-card"><div class="k">Маржа в долларах</div><div class="v" id="anMarginUsd">$0</div><div class="note" id="anUsdNote">По доступным курсам</div></div>
+        <div class="analytics-card"><div class="k">Tether</div><div class="v" id="anMarginTether">—</div><div class="note" id="anTetherNote">По расчётам, где Tether указан</div></div>
         <div class="analytics-card"><div class="k">Средняя маржа ₽</div><div class="v" id="anAvgMarginRub">0 ₽</div><div class="note">Среднее по выбранным машинам</div></div>
         <div class="analytics-card"><div class="k">Средняя маржа $</div><div class="v" id="anAvgMarginUsd">—</div><div class="note" id="anAvgUsdNote">По расчётам с доступным курсом</div></div>
+        <div class="analytics-card"><div class="k">Средний Tether</div><div class="v" id="anAvgMarginTether">—</div><div class="note" id="anAvgTetherNote">По расчётам, где Tether указан</div></div>
       </div>
       <div class="detail-toggle"><button class="btn primary" id="detailsToggle">Показать машины</button></div>
     </section>
 
     <section class="card table-card" id="detailsCard" style="display:none;margin-top:14px">
       <div class="table-scroll"><table>
-        <thead><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>Маржа ₽</th><th>Маржа $</th><th></th></tr></thead>
+        <thead><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>Маржа ₽</th><th>Маржа $</th><th>Tether</th><th></th></tr></thead>
         <tbody id="detailsBody"></tbody>
       </table><div class="empty" id="detailsEmpty">За этот период машин нет.</div></div>
     </section>
@@ -611,12 +684,13 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_DCjGSeXT4qQ89OkDVZx_Pw_PZDCO3yV";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const LOGIN_DOMAIN="@forangge.local";
 const DIRECTIONS=["Бишкек","Харгос","Китай","Китай через Бишкек","Корея"];
-const STATUS_CLASSES={"Выдан":"s-Выдан","В пути":"s-Впути","В брони":"s-Вброни","Возврат":"s-Возврат","":"s-none"};
+const STATUS_CLASSES={"Выдан":"s-Выдан","В пути":"s-Впути","В брони":"s-Вброни","Приехала":"s-Приехала","Возврат":"s-Возврат","":"s-none"};
 const nf0=new Intl.NumberFormat("ru-RU",{maximumFractionDigits:0});
 const nf2=new Intl.NumberFormat("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2});
 const usd0=new Intl.NumberFormat("en-US",{maximumFractionDigits:0});
 const rub=v=>`${nf0.format(Number(v)||0)} ₽`;
 const usd=v=>v==null||!Number.isFinite(Number(v))?"—":`$${usd0.format(Number(v)||0)}`;
+const tether=v=>v==null||!Number.isFinite(Number(v))||Number(v)<=0?"—":`${nf2.format(Number(v))} USDT`;
 const num=v=>{const x=parseFloat(v);return Number.isFinite(x)?x:0};
 
 function today(){const d=new Date();const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
@@ -639,10 +713,10 @@ const CONFIG={
     {title:"Расходы, сборы и маржа",note:"Суммы в рублях",fields:[
       {id:"prepRub",label:"Подготовка / брокер / эвакуаторы / доп. расходы",suffix:"₽"},
       {id:"utilRub",label:"Утильсбор",suffix:"₽"},
-      {id:"companyRub",label:"Комиссия компании",suffix:"₽"},
+      {id:"companyRub",label:"Комиссия компании",suffix:"₽"},{id:"tetherMargin",label:"Tether",suffix:"USDT",hint:"Необязательно. Заполняйте только если часть маржи получили в Tether."},
     ]}
   ],
-  calc:i=>{const S=num(i.usdRate)*(1+num(i.transferFee)/100),B=num(i.carUsd)*S,E=num(i.logisticsUsd)*S,G=num(i.bishkekUsd)*S,J=num(i.prepRub),K=(B+E+G+J)*(1+num(i.tezerFee)/100),N=K+num(i.utilRub),O=N+num(i.companyRub),m=num(i.companyRub);return{client:N,total:O,marginRub:m,marginUsd:S?m/S:null,breakdown:[["Курс с комиссией",S?nf2.format(S)+" ₽/$":"0 ₽/$"],["Автомобиль",rub(B)],["Логистика",rub(E)],["Расходы в Бишкеке",rub(G)],["Расходы с учётом обмена",rub(K)],["Утильсбор",rub(i.utilRub)],["Без утиля",S?usd((N-num(i.utilRub))/S):"—"],["С маржой без утиля",S?usd((O-num(i.utilRub))/S):"—"]]}}
+  calc:i=>{const S=num(i.usdRate)*(1+num(i.transferFee)/100),B=num(i.carUsd)*S,E=num(i.logisticsUsd)*S,G=num(i.bishkekUsd)*S,J=num(i.prepRub),K=(B+E+G+J)*(1+num(i.tezerFee)/100),N=K+num(i.utilRub),O=N+num(i.companyRub),m=num(i.companyRub);return{client:N,total:O,marginRub:m,marginUsd:S?m/S:null,marginTether:num(i.tetherMargin)>0?num(i.tetherMargin):null,breakdown:[["Курс с комиссией",S?nf2.format(S)+" ₽/$":"0 ₽/$"],["Автомобиль",rub(B)],["Логистика",rub(E)],["Расходы в Бишкеке",rub(G)],["Расходы с учётом обмена",rub(K)],["Утильсбор",rub(i.utilRub)],["Без утиля",S?usd((N-num(i.utilRub))/S):"—"],["С маржой без утиля",S?usd((O-num(i.utilRub))/S):"—"]]}}
 },
 "Харгос":{
   groups:[
@@ -652,10 +726,10 @@ const CONFIG={
     ]},
     {title:"Таможня и расходы",note:"Суммы в рублях",fields:[
       {id:"customsPurchaseRub",label:"Таможня по курсу евро на день покупки",suffix:"₽"},{id:"customsArrivalRub",label:"Таможня по текущему курсу евро при прибытии",suffix:"₽"},
-      {id:"rfExpensesRub",label:"Расходы РФ: погрузка / разгрузка и т.п.",suffix:"₽"},{id:"brokerRub",label:"Брокер / ПТС / СБГТС",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},
+      {id:"rfExpensesRub",label:"Расходы РФ: погрузка / разгрузка и т.п.",suffix:"₽"},{id:"brokerRub",label:"Брокер / ПТС / СБГТС",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},{id:"tetherMargin",label:"Tether",suffix:"USDT",hint:"Необязательно. Заполняйте только если часть маржи получили в Tether."},
     ]}
   ],
-  calc:i=>{const P=num(i.usdRate)*(1+num(i.transferFee)/100),C=num(i.priceUsd)*P,F=num(i.logisticsUsd)*P,G=num(i.priceUsd)+num(i.logisticsUsd),H=G*P,M=H+num(i.customsPurchaseRub)+num(i.rfExpensesRub)+num(i.customsArrivalRub)+num(i.brokerRub),N=M+num(i.marginRub),m=num(i.marginRub);return{client:M,total:N,marginRub:m,marginUsd:P?m/P:null,breakdown:[["Курс с комиссией",P?nf2.format(P)+" ₽/$":"0 ₽/$"],["Авто в рублях",rub(C)],["Логистика в рублях",rub(F)],["Авто + доставка",usd(G)],["Авто + доставка в рублях",rub(H)],["Таможня при покупке",rub(i.customsPurchaseRub)],["Таможня при прибытии",rub(i.customsArrivalRub)],["Брокер / ПТС / СБГТС",rub(i.brokerRub)]]}}
+  calc:i=>{const P=num(i.usdRate)*(1+num(i.transferFee)/100),C=num(i.priceUsd)*P,F=num(i.logisticsUsd)*P,G=num(i.priceUsd)+num(i.logisticsUsd),H=G*P,M=H+num(i.customsPurchaseRub)+num(i.rfExpensesRub)+num(i.customsArrivalRub)+num(i.brokerRub),N=M+num(i.marginRub),m=num(i.marginRub);return{client:M,total:N,marginRub:m,marginUsd:P?m/P:null,marginTether:num(i.tetherMargin)>0?num(i.tetherMargin):null,breakdown:[["Курс с комиссией",P?nf2.format(P)+" ₽/$":"0 ₽/$"],["Авто в рублях",rub(C)],["Логистика в рублях",rub(F)],["Авто + доставка",usd(G)],["Авто + доставка в рублях",rub(H)],["Таможня при покупке",rub(i.customsPurchaseRub)],["Таможня при прибытии",rub(i.customsArrivalRub)],["Брокер / ПТС / СБГТС",rub(i.brokerRub)]]}}
 },
 "Китай":{
   groups:[
@@ -668,11 +742,11 @@ const CONFIG={
     {title:"Расходы и маржа",note:"Суммы в рублях",fields:[
       {id:"utilCustomsRub",label:"Утиль и таможня",suffix:"₽"},{id:"brokerRub",label:"Брокер",suffix:"₽"},
       {id:"deliveryRub",label:"Стоимость доставки",suffix:"₽"},{id:"expensesRub",label:"Расходы",suffix:"₽"},
-      {id:"equipmentRub",label:"Доп. оборудование",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},
+      {id:"equipmentRub",label:"Доп. оборудование",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},{id:"tetherMargin",label:"Tether",suffix:"USDT",hint:"Необязательно. Заполняйте только если часть маржи получили в Tether."},
       {id:"usdRateForMargin",label:"USD/RUB для пересчёта маржи в $",suffix:"₽/$",hint:"На стоимость авто не влияет. Нужен только для вкладки «Итоги»."},
     ]}
   ],
-  calc:i=>{const D=num(i.carCny)*num(i.cnyRate)*(1+num(i.conversionFee)/100),K=D+num(i.utilCustomsRub)+num(i.brokerRub)+num(i.deliveryRub)+num(i.expensesRub)+num(i.equipmentRub),L=K+num(i.marginRub),m=num(i.marginRub),r=num(i.usdRateForMargin);return{client:K,total:L,marginRub:m,marginUsd:r?m/r:null,breakdown:[["Автомобиль в рублях",rub(D)],["Утиль и таможня",rub(i.utilCustomsRub)],["Брокер",rub(i.brokerRub)],["Доставка",rub(i.deliveryRub)],["Расходы",rub(i.expensesRub)],["Доп. оборудование",rub(i.equipmentRub)]]}}
+  calc:i=>{const D=num(i.carCny)*num(i.cnyRate)*(1+num(i.conversionFee)/100),K=D+num(i.utilCustomsRub)+num(i.brokerRub)+num(i.deliveryRub)+num(i.expensesRub)+num(i.equipmentRub),L=K+num(i.marginRub),m=num(i.marginRub),r=num(i.usdRateForMargin);return{client:K,total:L,marginRub:m,marginUsd:r?m/r:null,marginTether:num(i.tetherMargin)>0?num(i.tetherMargin):null,breakdown:[["Автомобиль в рублях",rub(D)],["Утиль и таможня",rub(i.utilCustomsRub)],["Брокер",rub(i.brokerRub)],["Доставка",rub(i.deliveryRub)],["Расходы",rub(i.expensesRub)],["Доп. оборудование",rub(i.equipmentRub)]]}}
 },
 "Китай через Бишкек":{
   groups:[
@@ -687,7 +761,7 @@ const CONFIG={
       {id:"utilRub",label:"Утильсбор",suffix:"₽"},
       {id:"equipmentRub",label:"Доп. оборудование",suffix:"₽"},
       {id:"usdRateForMargin",label:"Курс USD/RUB для маржи",suffix:"₽/$",hint:"На стоимость автомобиля не влияет. Используется только для пересчёта комиссии компании в доллары во вкладке «Итоги»."},
-      {id:"companyRub",label:"Комиссия компании",suffix:"₽"},
+      {id:"companyRub",label:"Комиссия компании",suffix:"₽"},{id:"tetherMargin",label:"Tether",suffix:"USDT",hint:"Необязательно. Заполняйте только если часть маржи получили в Tether."},
     ]}
   ],
   calc:i=>{
@@ -702,6 +776,7 @@ const CONFIG={
       total:base+margin,
       marginRub:margin,
       marginUsd:usdRate?margin/usdRate:null,
+      marginTether:num(i.tetherMargin)>0?num(i.tetherMargin):null,
       breakdown:[
         ["Автомобиль в рублях",rub(carRub)],
         ["Доставка до Бишкека в рублях",rub(deliveryRub)],
@@ -721,10 +796,10 @@ const CONFIG={
     {title:"Расходы и маржа",note:"Суммы в рублях",fields:[
       {id:"logisticsRub",label:"Логистика в Россию",suffix:"₽"},{id:"brokerRub",label:"Брокер",suffix:"₽"},
       {id:"customsUtilRub",label:"Таможня и утиль",suffix:"₽"},{id:"deliveryRfRub",label:"Доставка по РФ",suffix:"₽"},
-      {id:"expensesRub",label:"Расходы",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},
+      {id:"expensesRub",label:"Расходы",suffix:"₽"},{id:"marginRub",label:"Маржа",suffix:"₽"},{id:"tetherMargin",label:"Tether",suffix:"USDT",hint:"Необязательно. Заполняйте только если часть маржи получили в Tether."},
     ]}
   ],
-  calc:i=>{const C=num(i.wonPerUsd)?num(i.carWon)/num(i.wonPerUsd):0,D=C*num(i.usdRate),K=D+num(i.logisticsRub)+num(i.brokerRub)+num(i.customsUtilRub)+num(i.deliveryRfRub)+num(i.expensesRub),L=K+num(i.marginRub),m=num(i.marginRub);return{client:K,total:L,marginRub:m,marginUsd:num(i.usdRate)?m/num(i.usdRate):null,breakdown:[["Автомобиль в долларах",usd(C)],["Автомобиль в рублях",rub(D)],["Логистика",rub(i.logisticsRub)],["Брокер",rub(i.brokerRub)],["Таможня и утиль",rub(i.customsUtilRub)],["Доставка по РФ",rub(i.deliveryRfRub)],["Расходы",rub(i.expensesRub)]]}}
+  calc:i=>{const C=num(i.wonPerUsd)?num(i.carWon)/num(i.wonPerUsd):0,D=C*num(i.usdRate),K=D+num(i.logisticsRub)+num(i.brokerRub)+num(i.customsUtilRub)+num(i.deliveryRfRub)+num(i.expensesRub),L=K+num(i.marginRub),m=num(i.marginRub);return{client:K,total:L,marginRub:m,marginUsd:num(i.usdRate)?m/num(i.usdRate):null,marginTether:num(i.tetherMargin)>0?num(i.tetherMargin):null,breakdown:[["Автомобиль в долларах",usd(C)],["Автомобиль в рублях",rub(D)],["Логистика",rub(i.logisticsRub)],["Брокер",rub(i.brokerRub)],["Таможня и утиль",rub(i.customsUtilRub)],["Доставка по РФ",rub(i.deliveryRfRub)],["Расходы",rub(i.expensesRub)]]}}
 }
 };
 
@@ -918,6 +993,7 @@ function calculate(){
   document.getElementById("clientTotal").textContent=rub(c.client);
   document.getElementById("marginRub").textContent=rub(c.marginRub);
   document.getElementById("marginUsd").textContent=usd(c.marginUsd);
+  document.getElementById("marginTether").textContent=tether(c.marginTether);
   document.getElementById("breakdown").innerHTML=c.breakdown.map(([k,v])=>`<div class="result-row"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("");
   return c
 }
@@ -1094,7 +1170,49 @@ function renderBadge(){
   document.getElementById("recordCount").textContent=state.records.filter(r=>(r.scope||"summary")==="summary").length;
   document.getElementById("historyCount").textContent=state.records.length;
 }
+
 function statusHtml(s){return `<span class="status ${STATUS_CLASSES[s]||"s-none"}">${esc(s||"Без статуса")}</span>`}
+function selectedStatuses(id){
+  const root=document.getElementById(id);
+  if(!root)return[];
+  return [...root.querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.value);
+}
+function statusFilterMatches(status,selected){
+  if(!selected.length)return true;
+  return selected.some(v=>v==="__none"?!status:status===v);
+}
+function updateStatusMultiLabel(root){
+  const vals=selectedStatuses(root.id);
+  const label=root.querySelector(".status-multi-label");
+  if(!vals.length){label.textContent="Все статусы";return}
+  if(vals.length===1){
+    label.textContent=vals[0]==="__none"?"Без статуса":vals[0];
+    return
+  }
+  label.textContent=`Статусы: ${vals.length}`;
+}
+function initStatusMulti(id,onChange){
+  const root=document.getElementById(id);
+  if(!root)return;
+  const btn=root.querySelector(".status-multi-btn");
+  btn.addEventListener("click",e=>{
+    e.stopPropagation();
+    document.querySelectorAll(".status-multi.open").forEach(x=>{if(x!==root)x.classList.remove("open")});
+    root.classList.toggle("open");
+  });
+  root.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.addEventListener("change",()=>{
+    updateStatusMultiLabel(root);onChange();
+  }));
+  root.querySelector(".status-multi-reset").addEventListener("click",e=>{
+    e.stopPropagation();
+    root.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
+    updateStatusMultiLabel(root);onChange();
+  });
+  root.querySelector(".status-multi-menu").addEventListener("click",e=>e.stopPropagation());
+  updateStatusMultiLabel(root);
+}
+document.addEventListener("click",()=>document.querySelectorAll(".status-multi.open").forEach(x=>x.classList.remove("open")));
+
 function scopeHtml(scope){
   return scope==="history"
     ? '<span class="scope-badge scope-history">Предварительный</span>'
@@ -1102,11 +1220,13 @@ function scopeHtml(scope){
 }
 function fdate(s){if(!s)return"Без даты";const a=s.split("-");return a.length===3?`${a[2]}.${a[1]}.${a[0]}`:s}
 function getSummaryRows(){
-  const q=document.getElementById("summarySearch").value.trim().toLowerCase(),d=document.getElementById("summaryDirection").value,st=document.getElementById("summaryStatus").value;
+  const q=document.getElementById("summarySearch").value.trim().toLowerCase();
+  const d=document.getElementById("summaryDirection").value;
+  const statuses=selectedStatuses("summaryStatusMulti");
   return state.records.filter(r=>{
     if((r.scope||"summary")!=="summary")return false;
     const bag=(r.title+" "+(r.comment||"")+" "+(r.inputs?.vin||"")).toLowerCase();
-    return(!q||bag.includes(q))&&(!d||r.direction===d)&&(!st||(st==="__none"?!r.status:r.status===st))
+    return(!q||bag.includes(q))&&(!d||r.direction===d)&&statusFilterMatches(r.status,statuses)
   })
 }
 function renderSummary(){
@@ -1115,7 +1235,7 @@ function renderSummary(){
   for(const r of rows){const c=recordCalc(r);sClient+=c.client;sTotal+=c.total;const tr=document.createElement("tr");tr.innerHTML=`
     <td>${esc(fdate(r.date))}</td>
     <td><div class="name">${esc(r.title)}</div><div class="sub">${r.comment?esc(r.comment.slice(0,70)):"Без комментария"}</div></td>
-    <td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.total)}</td><td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div></td>
+    <td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.total)}</td><td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></td>
     <td><div class="icon-actions">
       <button class="icon-btn edit-action" data-edit="${esc(r.id)}" title="Редактировать">✎</button>
       <button class="icon-btn comment-action" data-comment="${esc(r.id)}" title="Комментарий">💬</button>
@@ -1129,7 +1249,7 @@ function renderSummary(){
 }
 function renderMobileSummary(rows){
   const box=document.getElementById("summaryMobile");box.innerHTML=rows.length?"":"<div class='empty'>Нет записей.</div>";
-  for(const r of rows){const c=recordCalc(r);const x=document.createElement("div");x.className="mcard";x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div>${statusHtml(r.status)}</div><div class="mcard-grid"><div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div><div><div class="k">С маржой</div><div class="v">${rub(c.total)}</div></div><div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div></div><div class="mobile-actions">
+  for(const r of rows){const c=recordCalc(r);const x=document.createElement("div");x.className="mcard";x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div>${statusHtml(r.status)}</div><div class="mcard-grid"><div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div><div><div class="k">С маржой</div><div class="v">${rub(c.total)}</div></div><div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div><div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></div><div class="mobile-actions">
           <button class="btn small mobile-edit" data-medit="${esc(r.id)}">✎ Изменить</button>
           <button class="btn small mobile-comment" data-mcomment="${esc(r.id)}">💬 Коммент.</button>
           <button class="btn small mobile-export" data-mxls="${esc(r.id)}">XLS</button>
@@ -1140,17 +1260,19 @@ function renderMobileSummary(rows){
   box.querySelectorAll("[data-mxls]").forEach(b=>b.onclick=()=>exportSingleExcel(state.records.find(r=>r.id===b.dataset.mxls)));
   box.querySelectorAll("[data-mpdf]").forEach(b=>b.onclick=()=>printSingle(state.records.find(r=>r.id===b.dataset.mpdf)))
 }
-["summarySearch","summaryDirection","summaryStatus"].forEach(id=>document.getElementById(id).addEventListener(id==="summarySearch"?"input":"change",renderSummary));
+["summarySearch","summaryDirection"].forEach(id=>document.getElementById(id).addEventListener(id==="summarySearch"?"input":"change",renderSummary));
+initStatusMulti("summaryStatusMulti",renderSummary);
 
 
 function getHistoryRows(){
   const q=document.getElementById("historySearch").value.trim().toLowerCase();
   const d=document.getElementById("historyDirection").value;
   const scope=document.getElementById("historyScope").value;
+  const statuses=selectedStatuses("historyStatusMulti");
   return state.records.filter(r=>{
     const actualScope=r.scope||"summary";
     const bag=(r.title+" "+(r.comment||"")+" "+(r.inputs?.vin||"")).toLowerCase();
-    return(!q||bag.includes(q))&&(!d||r.direction===d)&&(!scope||actualScope===scope)
+    return(!q||bag.includes(q))&&(!d||r.direction===d)&&(!scope||actualScope===scope)&&statusFilterMatches(r.status,statuses)
   })
 }
 function renderHistory(){
@@ -1167,7 +1289,7 @@ function renderHistory(){
       <td>${scopeHtml(r.scope||"summary")}</td>
       <td>${statusHtml(r.status)}</td>
       <td class="money">${rub(c.client)}</td>
-      <td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div></td>
+      <td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></td>
       <td><div class="icon-actions">
         <button class="icon-btn edit-action" data-hedit="${esc(r.id)}" title="Редактировать">✎</button>
         <button class="icon-btn comment-action" data-hcomment="${esc(r.id)}" title="Комментарий">💬</button>
@@ -1196,7 +1318,7 @@ function renderMobileHistory(rows){
     x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${scopeHtml(r.scope||"summary")}${statusHtml(r.status)}</div></div>
       <div class="mcard-grid">
         <div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div>
-        <div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div></div>
+        <div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div><div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></div>
         <div class="mobile-actions">
           <button class="btn small mobile-edit" data-hmedit="${esc(r.id)}">✎ Изменить</button>
           ${(r.scope||"summary")==="history"?`<button class="btn small promote-action" data-hmpromote="${esc(r.id)}">→ В Сводку</button>`:""}
@@ -1269,31 +1391,46 @@ async function promoteCurrentToSummary(){
 }
 document.getElementById("promoteEditBtn").onclick=promoteCurrentToSummary;
 ["historySearch","historyDirection","historyScope"].forEach(id=>document.getElementById(id).addEventListener(id==="historySearch"?"input":"change",renderHistory));
+initStatusMulti("historyStatusMulti",renderHistory);
 
 function analyticsRows(){
-  const from=document.getElementById("anFrom").value,to=document.getElementById("anTo").value,d=document.getElementById("anDirection").value,st=document.getElementById("anStatus").value;
+  const from=document.getElementById("anFrom").value,to=document.getElementById("anTo").value,d=document.getElementById("anDirection").value;
+  const statuses=selectedStatuses("anStatusMulti");
   return state.records.filter(r=>{
     if((r.scope||"summary")!=="summary")return false;
-    if(from&&(!r.date||r.date<from))return false;if(to&&(!r.date||r.date>to))return false;if(d&&r.direction!==d)return false;if(st&&(st==="__none"?!!r.status:r.status!==st))return false;return true
+    if(from&&(!r.date||r.date<from))return false;
+    if(to&&(!r.date||r.date>to))return false;
+    if(d&&r.direction!==d)return false;
+    if(!statusFilterMatches(r.status,statuses))return false;
+    return true
   })
 }
 function renderAnalytics(){
-  const rows=analyticsRows(),st=document.getElementById("anStatus").value;let mr=0,mu=0,missing=0,usdCount=0;
+  const rows=analyticsRows();
+  let mr=0,mu=0,missing=0,usdCount=0,mt=0,tetherCount=0;
   for(const r of rows){
     const c=recordCalc(r);
     mr+=c.marginRub;
     if(c.marginUsd==null||!Number.isFinite(c.marginUsd))missing++;
     else{mu+=c.marginUsd;usdCount++}
+    if(c.marginTether!=null&&Number.isFinite(Number(c.marginTether))&&Number(c.marginTether)>0){
+      mt+=Number(c.marginTether);tetherCount++;
+    }
   }
   const avgRub=rows.length?mr/rows.length:0;
   const avgUsd=usdCount?mu/usdCount:null;
+  const avgTether=tetherCount?mt/tetherCount:null;
   document.getElementById("anCount").textContent=rows.length;
-  document.getElementById("anCountLabel").textContent=st&&st!=="__none"?st:"Машин";
+  document.getElementById("anCountLabel").textContent="Машин";
   document.getElementById("anMarginRub").textContent=rub(mr);
   document.getElementById("anMarginUsd").textContent=usd(mu);
+  document.getElementById("anMarginTether").textContent=tether(tetherCount?mt:null);
   document.getElementById("anAvgMarginRub").textContent=rub(avgRub);
   document.getElementById("anAvgMarginUsd").textContent=usd(avgUsd);
+  document.getElementById("anAvgMarginTether").textContent=tether(avgTether);
   document.getElementById("anAvgUsdNote").textContent=usdCount?`Среднее по ${usdCount} расчёт(ам) с доступным курсом`:"Нет расчётов с доступным курсом";
+  document.getElementById("anTetherNote").textContent=tetherCount?`Сумма по ${tetherCount} расчёт(ам) с Tether`:"Tether не указан";
+  document.getElementById("anAvgTetherNote").textContent=tetherCount?`Среднее по ${tetherCount} расчёт(ам) с Tether`:"Tether не указан";
   const f=document.getElementById("anFrom").value,t=document.getElementById("anTo").value;document.getElementById("anPeriodText").textContent=f||t?`${f?fdate(f):"начало"} → ${t?fdate(t):"сегодня"}`:"За всё время";
   document.getElementById("anUsdNote").textContent=missing?`Для ${missing} расчёт(ов) нет USD/RUB для маржи`:"По всем выбранным расчётам";
   document.getElementById("detailsToggle").textContent=(detailsOpen?"Скрыть машины":"Показать машины")+" · "+rows.length;
@@ -1301,10 +1438,11 @@ function renderAnalytics(){
 }
 function renderDetails(rows){
   const b=document.getElementById("detailsBody");b.innerHTML="";
-  for(const r of rows){const c=recordCalc(r),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(fdate(r.date))}</td><td><div class="name">${esc(r.title)}</div></td><td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.marginRub)}</td><td class="money">${usd(c.marginUsd)}</td><td><button class="icon-btn" data-dedit="${esc(r.id)}">✎</button></td>`;b.appendChild(tr)}
+  for(const r of rows){const c=recordCalc(r),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(fdate(r.date))}</td><td><div class="name">${esc(r.title)}</div></td><td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.marginRub)}</td><td class="money">${usd(c.marginUsd)}</td><td class="money">${tether(c.marginTether)}</td><td><button class="icon-btn" data-dedit="${esc(r.id)}">✎</button></td>`;b.appendChild(tr)}
   document.getElementById("detailsEmpty").style.display=rows.length?"none":"block";b.querySelectorAll("[data-dedit]").forEach(x=>x.onclick=()=>editRecord(x.dataset.dedit))
 }
-["anFrom","anTo","anDirection","anStatus"].forEach(id=>document.getElementById(id).addEventListener("change",renderAnalytics));
+["anFrom","anTo","anDirection"].forEach(id=>document.getElementById(id).addEventListener("change",renderAnalytics));
+initStatusMulti("anStatusMulti",renderAnalytics);
 document.getElementById("detailsToggle").onclick=()=>{detailsOpen=!detailsOpen;document.getElementById("detailsCard").style.display=detailsOpen?"block":"none";renderAnalytics()};
 document.getElementById("allTime").onclick=()=>{document.getElementById("anFrom").value="";document.getElementById("anTo").value="";renderAnalytics()};
 document.getElementById("thisMonth").onclick=()=>{const d=new Date(),y=d.getFullYear(),m=d.getMonth()+1;document.getElementById("anFrom").value=`${y}-${String(m).padStart(2,"0")}-01`;document.getElementById("anTo").value=today();renderAnalytics()};
@@ -1350,13 +1488,13 @@ function excelHtml(title,headers,rows){
 function recordRows(r){
   const c=recordCalc(r),rows=[["Направление",r.direction],["Автомобиль / клиент",r.title],["Дата",r.date||""],["Статус",r.status||""],["Комментарий",r.comment||""]];
   for(const g of CONFIG[r.direction].groups)for(const f of g.fields)rows.push([f.label,r.inputs?.[f.id]??""]);
-  rows.push(["Итого для клиента",Math.round(c.client*100)/100],["Итого с маржой",Math.round(c.total*100)/100],["Маржа ₽",Math.round(c.marginRub*100)/100],["Маржа $",c.marginUsd==null?"":Math.round(c.marginUsd*100)/100]);
+  rows.push(["Итого для клиента",Math.round(c.client*100)/100],["Итого с маржой",Math.round(c.total*100)/100],["Маржа ₽",Math.round(c.marginRub*100)/100],["Маржа $",c.marginUsd==null?"":Math.round(c.marginUsd*100)/100],["Tether",c.marginTether==null?"":Math.round(c.marginTether*100)/100]);
   return rows
 }
 function exportSingleExcel(r){if(!r)r=makeRecord();saveBlob(excelHtml("Расчёт "+r.title,["Поле","Значение"],recordRows(r)),safeName(r.title)+".xls","application/vnd.ms-excel")}
 function exportSummaryExcel(){
-  const rows=getSummaryRows().map(r=>{const c=recordCalc(r);return[r.date||"",r.title,r.direction,r.status||"",r.comment||"",Math.round(c.client),Math.round(c.total),Math.round(c.marginRub),c.marginUsd==null?"":Math.round(c.marginUsd*100)/100]});
-  saveBlob(excelHtml("Сводка",["Дата","Автомобиль","Направление","Статус","Комментарий","Для клиента ₽","С маржой ₽","Маржа ₽","Маржа $"],rows),"svodka.xls","application/vnd.ms-excel")
+  const rows=getSummaryRows().map(r=>{const c=recordCalc(r);return[r.date||"",r.title,r.direction,r.status||"",r.comment||"",Math.round(c.client),Math.round(c.total),Math.round(c.marginRub),c.marginUsd==null?"":Math.round(c.marginUsd*100)/100,c.marginTether==null?"":Math.round(c.marginTether*100)/100]});
+  saveBlob(excelHtml("Сводка",["Дата","Автомобиль","Направление","Статус","Комментарий","Для клиента ₽","С маржой ₽","Маржа ₽","Маржа $","Tether"],rows),"svodka.xls","application/vnd.ms-excel")
 }
 function printHtml(title,body){
   const w=window.open("","_blank");if(!w){toast("Разреши всплывающие окна для PDF");return}
@@ -1493,7 +1631,7 @@ function printHtml(title,body){
 </style></head><body><h1>${esc(title)}</h1>${body}</body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),250)
 }
 function printSingle(r){if(!r)r=makeRecord();const rows=recordRows(r);printHtml("Расчёт "+r.title,`<table>${rows.map(x=>`<tr><th>${esc(x[0])}</th><td>${esc(x[1])}</td></tr>`).join("")}</table>`)}
-function printSummary(){const rows=getSummaryRows();printHtml("Сводка расчётов",`<table><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th></tr>${rows.map(r=>{const c=recordCalc(r);return`<tr><td>${esc(fdate(r.date))}</td><td>${esc(r.title)}</td><td>${esc(r.direction)}</td><td>${esc(r.status||"")}</td><td>${rub(c.client)}</td><td>${rub(c.total)}</td><td>${rub(c.marginRub)} / ${usd(c.marginUsd)}</td></tr>`}).join("")}</table>`)}
+function printSummary(){const rows=getSummaryRows();printHtml("Сводка расчётов",`<table><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th></tr>${rows.map(r=>{const c=recordCalc(r);return`<tr><td>${esc(fdate(r.date))}</td><td>${esc(r.title)}</td><td>${esc(r.direction)}</td><td>${esc(r.status||"")}</td><td>${rub(c.client)}</td><td>${rub(c.total)}</td><td>${rub(c.marginRub)} / ${usd(c.marginUsd)} / ${tether(c.marginTether)}</td></tr>`}).join("")}</table>`)}
 document.getElementById("singleExcelBtn").onclick=()=>exportSingleExcel();document.getElementById("singlePdfBtn").onclick=()=>printSingle();document.getElementById("summaryExcelBtn").onclick=exportSummaryExcel;document.getElementById("summaryPdfBtn").onclick=printSummary;
 
 
