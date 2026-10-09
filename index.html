@@ -438,6 +438,17 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
   .status-multi-menu{width:100%;max-width:none}
 }
 
+
+.issued-date-field{display:none}
+.issued-date-field.show{display:block}
+.issued-date-note{
+  margin-top:4px;
+  font-size:10px;
+  color:#727984;
+  white-space:nowrap
+}
+.issued-date-note strong{color:#343941}
+
 </style>
 </head>
 <body>
@@ -463,7 +474,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
 <div class="page" id="appPage">
   <div class="header">
     <div>
-      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.17</span></div>
+      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.18</span></div>
       <h1>Автокалькулятор <span class="brand-by">by forangge</span></h1>
       <p class="subtitle">Бишкек, Харгос, Китай, Китай через Бишкек и Корея в одном интерфейсе.</p>
     </div>
@@ -509,6 +520,11 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
             <div class="field"><label>Статус</label><select id="statusInput" class="status-select">
               <option value="">Без статуса</option><option>В брони</option><option>В пути</option><option>Приехала</option><option>Выдан</option><option>Возврат</option>
             </select></div>
+            <div class="field issued-date-field" id="issuedDateField">
+              <label>Дата выдачи</label>
+              <input id="issuedDateInput" type="date">
+              <div class="hint">Используется в «Итогах» для машин со статусом «Выдан».</div>
+            </div>
             <div class="field full">
               <label>Комментарий</label>
               <div class="comment-line"><button class="btn" id="commentDraftBtn">💬 Добавить / изменить комментарий</button><div class="comment-preview" id="commentPreview">Комментария нет</div></div>
@@ -614,7 +630,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
     </div>
     <section class="card table-card">
       <div class="table-scroll desktop-table"><table>
-        <thead><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th><th>Действия</th></tr></thead>
+        <thead><tr><th>Дата учёта</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th><th>Действия</th></tr></thead>
         <tbody id="summaryBody"></tbody>
       </table><div class="empty" id="summaryEmpty">Нет записей по выбранным фильтрам.</div></div>
       <div class="mobile-summary" id="summaryMobile"></div>
@@ -804,7 +820,7 @@ const CONFIG={
 };
 
 let state={records:[]};
-let currentDirection="Бишкек",currentRecordScope="summary",editingOrigin="default",editingId=null,editingVersion=null,editBecameStale=false,currentComment="",commentTarget=null,detailsOpen=false;
+let currentDirection="Бишкек",currentRecordScope="summary",editingOrigin="default",editingId=null,editingVersion=null,editBecameStale=false,currentComment="",commentTarget=null,detailsOpen=false,lastStatusValue="";
 let drafts={};
 let realtimeChannel=null;
 let refreshTimer=null;
@@ -817,6 +833,7 @@ function dbToRecord(row){
     direction:row.direction,
     title:row.title,
     date:row.calc_date||"",
+    issuedDate:row.issued_date||"",
     status:row.status||"",
     comment:row.comment||"",
     inputs:row.inputs||{},
@@ -834,6 +851,7 @@ function payloadFromRecord(r){
     direction:r.direction,
     title:r.title,
     calc_date:r.date||null,
+    issued_date:r.issuedDate||null,
     status:r.status||null,
     comment:r.comment||"",
     inputs:r.inputs||{},
@@ -945,7 +963,13 @@ function getDefaults(dir){
 function captureForm(){
   const inp={date:document.getElementById("dateInput").value};
   document.querySelectorAll("[data-field]").forEach(e=>inp[e.dataset.field]=e.type==="text"?e.value:num(e.value));
-  return{title:document.getElementById("titleInput").value,status:document.getElementById("statusInput").value,comment:currentComment,inputs:inp};
+  return{
+    title:document.getElementById("titleInput").value,
+    status:document.getElementById("statusInput").value,
+    issuedDate:document.getElementById("issuedDateInput").value,
+    comment:currentComment,
+    inputs:inp
+  };
 }
 function changeDirection(d){
   if(editingId&&d!==currentDirection){toast("У сохранённого расчёта направление не меняем");return}
@@ -956,7 +980,12 @@ function buildForm(data){
   document.getElementById("titleInput").value=data.title||"";
   document.getElementById("dateInput").value=data.inputs?.date||data.date||today();
   document.getElementById("statusInput").value=data.status||"";
-  currentComment=data.comment||"";updateCommentPreview();updateStatusStyle();
+  document.getElementById("issuedDateInput").value=data.issuedDate||"";
+  lastStatusValue=data.status||"";
+  currentComment=data.comment||"";
+  updateCommentPreview();
+  updateStatusStyle();
+  updateIssuedDateField();
   const box=document.getElementById("dynamicGroups");box.innerHTML="";
   for(const g of CONFIG[currentDirection].groups){
     const sec=document.createElement("section");sec.className="card";
@@ -971,9 +1000,26 @@ function buildForm(data){
   }
   document.querySelectorAll("[data-field]").forEach(e=>e.addEventListener("input",calculate));
 }
-function updateStatusStyle(){const e=document.getElementById("statusInput");e.className="status-select status-"+(e.value||"none").replaceAll(" ","")}
-document.getElementById("statusInput").onchange=()=>{updateStatusStyle();calculate()};
-["titleInput","dateInput"].forEach(id=>document.getElementById(id).addEventListener("input",calculate));
+function updateStatusStyle(){
+  const e=document.getElementById("statusInput");
+  e.className="status-select status-"+(e.value||"none").replaceAll(" ","")
+}
+function updateIssuedDateField(){
+  const status=document.getElementById("statusInput").value;
+  document.getElementById("issuedDateField").classList.toggle("show",status==="Выдан");
+}
+document.getElementById("statusInput").onchange=()=>{
+  const next=document.getElementById("statusInput").value;
+  const issued=document.getElementById("issuedDateInput");
+  if(next==="Выдан" && lastStatusValue!=="Выдан" && !issued.value){
+    issued.value=today();
+  }
+  lastStatusValue=next;
+  updateStatusStyle();
+  updateIssuedDateField();
+  calculate();
+};
+["titleInput","dateInput","issuedDateInput"].forEach(id=>document.getElementById(id).addEventListener("input",calculate));
 
 function currentInputs(){return captureForm().inputs}
 function calculate(){
@@ -999,7 +1045,7 @@ function calculate(){
 }
 function makeRecord(){
   const d=captureForm(),old=editingId?state.records.find(r=>r.id===editingId):null;
-  return{id:editingId||uid(),direction:currentDirection,title:d.title.trim()||"Без названия",status:d.status,comment:d.comment,date:d.inputs.date||"",inputs:d.inputs,version:old?.version||1,createdAt:old?.createdAt||null,updatedAt:old?.updatedAt||null,scope:old?.scope||currentRecordScope}
+  return{id:editingId||uid(),direction:currentDirection,title:d.title.trim()||"Без названия",status:d.status,issuedDate:d.issuedDate||"",comment:d.comment,date:d.inputs.date||"",inputs:d.inputs,version:old?.version||1,createdAt:old?.createdAt||null,updatedAt:old?.updatedAt||null,scope:old?.scope||currentRecordScope}
 }
 async function save(){
   const btn=document.getElementById("saveBtn");
@@ -1219,6 +1265,17 @@ function scopeHtml(scope){
     : '<span class="scope-badge scope-summary">В Сводке</span>';
 }
 function fdate(s){if(!s)return"Без даты";const a=s.split("-");return a.length===3?`${a[2]}.${a[1]}.${a[0]}`:s}
+function issuedDateHtml(r){
+  return r.status==="Выдан"
+    ? `<div class="issued-date-note">Дата выдачи: <strong>${esc(r.issuedDate?fdate(r.issuedDate):"не указана")}</strong></div>`
+    : "";
+}
+function analyticsRecordDate(r){
+  return r.status==="Выдан" ? (r.issuedDate||"") : (r.date||"");
+}
+function analyticsDateKind(r){
+  return r.status==="Выдан" ? "дата выдачи" : "дата расчёта";
+}
 function getSummaryRows(){
   const q=document.getElementById("summarySearch").value.trim().toLowerCase();
   const d=document.getElementById("summaryDirection").value;
@@ -1235,7 +1292,7 @@ function renderSummary(){
   for(const r of rows){const c=recordCalc(r);sClient+=c.client;sTotal+=c.total;const tr=document.createElement("tr");tr.innerHTML=`
     <td>${esc(fdate(r.date))}</td>
     <td><div class="name">${esc(r.title)}</div><div class="sub">${r.comment?esc(r.comment.slice(0,70)):"Без комментария"}</div></td>
-    <td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.total)}</td><td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></td>
+    <td>${esc(r.direction)}</td><td>${statusHtml(r.status)}${issuedDateHtml(r)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.total)}</td><td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></td>
     <td><div class="icon-actions">
       <button class="icon-btn edit-action" data-edit="${esc(r.id)}" title="Редактировать">✎</button>
       <button class="icon-btn comment-action" data-comment="${esc(r.id)}" title="Комментарий">💬</button>
@@ -1249,7 +1306,7 @@ function renderSummary(){
 }
 function renderMobileSummary(rows){
   const box=document.getElementById("summaryMobile");box.innerHTML=rows.length?"":"<div class='empty'>Нет записей.</div>";
-  for(const r of rows){const c=recordCalc(r);const x=document.createElement("div");x.className="mcard";x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div>${statusHtml(r.status)}</div><div class="mcard-grid"><div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div><div><div class="k">С маржой</div><div class="v">${rub(c.total)}</div></div><div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div><div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></div><div class="mobile-actions">
+  for(const r of rows){const c=recordCalc(r);const x=document.createElement("div");x.className="mcard";x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div>${statusHtml(r.status)}${issuedDateHtml(r)}</div><div class="mcard-grid"><div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div><div><div class="k">С маржой</div><div class="v">${rub(c.total)}</div></div><div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div><div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></div><div class="mobile-actions">
           <button class="btn small mobile-edit" data-medit="${esc(r.id)}">✎ Изменить</button>
           <button class="btn small mobile-comment" data-mcomment="${esc(r.id)}">💬 Коммент.</button>
           <button class="btn small mobile-export" data-mxls="${esc(r.id)}">XLS</button>
@@ -1287,7 +1344,7 @@ function renderHistory(){
       <td><div class="name">${esc(r.title)}</div><div class="sub">${r.comment?esc(r.comment.slice(0,70)):"Без комментария"}</div></td>
       <td>${esc(r.direction)}</td>
       <td>${scopeHtml(r.scope||"summary")}</td>
-      <td>${statusHtml(r.status)}</td>
+      <td>${statusHtml(r.status)}${issuedDateHtml(r)}</td>
       <td class="money">${rub(c.client)}</td>
       <td class="money">${rub(c.marginRub)}<div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></td>
       <td><div class="icon-actions">
@@ -1315,7 +1372,7 @@ function renderMobileHistory(rows){
   for(const r of rows){
     const c=recordCalc(r),x=document.createElement("div");
     x.className="mcard";
-    x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${scopeHtml(r.scope||"summary")}${statusHtml(r.status)}</div></div>
+    x.innerHTML=`<div class="mcard-top"><div><div class="mcard-title">${esc(r.title)}</div><div class="sub">${esc(r.direction)} · ${esc(fdate(r.date))}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${scopeHtml(r.scope||"summary")}${statusHtml(r.status)}${issuedDateHtml(r)}</div></div>
       <div class="mcard-grid">
         <div><div class="k">Для клиента</div><div class="v">${rub(c.client)}</div></div>
         <div><div class="k">Маржа</div><div class="v">${rub(c.marginRub)}</div><div class="sub">${usd(c.marginUsd)}</div><div class="sub tether-sub">${tether(c.marginTether)}</div></div>
@@ -1398,8 +1455,9 @@ function analyticsRows(){
   const statuses=selectedStatuses("anStatusMulti");
   return state.records.filter(r=>{
     if((r.scope||"summary")!=="summary")return false;
-    if(from&&(!r.date||r.date<from))return false;
-    if(to&&(!r.date||r.date>to))return false;
+    const reportDate=analyticsRecordDate(r);
+    if(from&&(!reportDate||reportDate<from))return false;
+    if(to&&(!reportDate||reportDate>to))return false;
     if(d&&r.direction!==d)return false;
     if(!statusFilterMatches(r.status,statuses))return false;
     return true
@@ -1438,7 +1496,7 @@ function renderAnalytics(){
 }
 function renderDetails(rows){
   const b=document.getElementById("detailsBody");b.innerHTML="";
-  for(const r of rows){const c=recordCalc(r),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(fdate(r.date))}</td><td><div class="name">${esc(r.title)}</div></td><td>${esc(r.direction)}</td><td>${statusHtml(r.status)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.marginRub)}</td><td class="money">${usd(c.marginUsd)}</td><td class="money">${tether(c.marginTether)}</td><td><button class="icon-btn" data-dedit="${esc(r.id)}">✎</button></td>`;b.appendChild(tr)}
+  for(const r of rows){const c=recordCalc(r),tr=document.createElement("tr");const reportDate=analyticsRecordDate(r);tr.innerHTML=`<td>${esc(reportDate?fdate(reportDate):"Без даты")}<div class="sub">${esc(analyticsDateKind(r))}</div></td><td><div class="name">${esc(r.title)}</div></td><td>${esc(r.direction)}</td><td>${statusHtml(r.status)}${issuedDateHtml(r)}</td><td class="money">${rub(c.client)}</td><td class="money">${rub(c.marginRub)}</td><td class="money">${usd(c.marginUsd)}</td><td class="money">${tether(c.marginTether)}</td><td><button class="icon-btn" data-dedit="${esc(r.id)}">✎</button></td>`;b.appendChild(tr)}
   document.getElementById("detailsEmpty").style.display=rows.length?"none":"block";b.querySelectorAll("[data-dedit]").forEach(x=>x.onclick=()=>editRecord(x.dataset.dedit))
 }
 ["anFrom","anTo","anDirection"].forEach(id=>document.getElementById(id).addEventListener("change",renderAnalytics));
@@ -1486,15 +1544,15 @@ function excelHtml(title,headers,rows){
   return `\ufeff<html><head><meta charset="UTF-8"></head><body><h2>${esc(title)}</h2>${table}</body></html>`
 }
 function recordRows(r){
-  const c=recordCalc(r),rows=[["Направление",r.direction],["Автомобиль / клиент",r.title],["Дата",r.date||""],["Статус",r.status||""],["Комментарий",r.comment||""]];
+  const c=recordCalc(r),rows=[["Направление",r.direction],["Автомобиль / клиент",r.title],["Дата расчёта",r.date||""],["Статус",r.status||""],["Дата выдачи",r.issuedDate||""],["Комментарий",r.comment||""]];
   for(const g of CONFIG[r.direction].groups)for(const f of g.fields)rows.push([f.label,r.inputs?.[f.id]??""]);
   rows.push(["Итого для клиента",Math.round(c.client*100)/100],["Итого с маржой",Math.round(c.total*100)/100],["Маржа ₽",Math.round(c.marginRub*100)/100],["Маржа $",c.marginUsd==null?"":Math.round(c.marginUsd*100)/100],["Tether",c.marginTether==null?"":Math.round(c.marginTether*100)/100]);
   return rows
 }
 function exportSingleExcel(r){if(!r)r=makeRecord();saveBlob(excelHtml("Расчёт "+r.title,["Поле","Значение"],recordRows(r)),safeName(r.title)+".xls","application/vnd.ms-excel")}
 function exportSummaryExcel(){
-  const rows=getSummaryRows().map(r=>{const c=recordCalc(r);return[r.date||"",r.title,r.direction,r.status||"",r.comment||"",Math.round(c.client),Math.round(c.total),Math.round(c.marginRub),c.marginUsd==null?"":Math.round(c.marginUsd*100)/100,c.marginTether==null?"":Math.round(c.marginTether*100)/100]});
-  saveBlob(excelHtml("Сводка",["Дата","Автомобиль","Направление","Статус","Комментарий","Для клиента ₽","С маржой ₽","Маржа ₽","Маржа $","Tether"],rows),"svodka.xls","application/vnd.ms-excel")
+  const rows=getSummaryRows().map(r=>{const c=recordCalc(r);return[r.date||"",r.issuedDate||"",r.title,r.direction,r.status||"",r.comment||"",Math.round(c.client),Math.round(c.total),Math.round(c.marginRub),c.marginUsd==null?"":Math.round(c.marginUsd*100)/100,c.marginTether==null?"":Math.round(c.marginTether*100)/100]});
+  saveBlob(excelHtml("Сводка",["Дата расчёта","Дата выдачи","Автомобиль","Направление","Статус","Комментарий","Для клиента ₽","С маржой ₽","Маржа ₽","Маржа $","Tether"],rows),"svodka.xls","application/vnd.ms-excel")
 }
 function printHtml(title,body){
   const w=window.open("","_blank");if(!w){toast("Разреши всплывающие окна для PDF");return}
@@ -1631,7 +1689,7 @@ function printHtml(title,body){
 </style></head><body><h1>${esc(title)}</h1>${body}</body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),250)
 }
 function printSingle(r){if(!r)r=makeRecord();const rows=recordRows(r);printHtml("Расчёт "+r.title,`<table>${rows.map(x=>`<tr><th>${esc(x[0])}</th><td>${esc(x[1])}</td></tr>`).join("")}</table>`)}
-function printSummary(){const rows=getSummaryRows();printHtml("Сводка расчётов",`<table><tr><th>Дата</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th></tr>${rows.map(r=>{const c=recordCalc(r);return`<tr><td>${esc(fdate(r.date))}</td><td>${esc(r.title)}</td><td>${esc(r.direction)}</td><td>${esc(r.status||"")}</td><td>${rub(c.client)}</td><td>${rub(c.total)}</td><td>${rub(c.marginRub)} / ${usd(c.marginUsd)} / ${tether(c.marginTether)}</td></tr>`}).join("")}</table>`)}
+function printSummary(){const rows=getSummaryRows();printHtml("Сводка расчётов",`<table><tr><th>Дата расчёта</th><th>Дата выдачи</th><th>Автомобиль</th><th>Направление</th><th>Статус</th><th>Для клиента</th><th>С маржой</th><th>Маржа</th></tr>${rows.map(r=>{const c=recordCalc(r);return`<tr><td>${esc(fdate(r.date))}</td><td>${esc(r.issuedDate?fdate(r.issuedDate):"")}</td><td>${esc(r.title)}</td><td>${esc(r.direction)}</td><td>${esc(r.status||"")}</td><td>${rub(c.client)}</td><td>${rub(c.total)}</td><td>${rub(c.marginRub)} / ${usd(c.marginUsd)} / ${tether(c.marginTether)}</td></tr>`}).join("")}</table>`)}
 document.getElementById("singleExcelBtn").onclick=()=>exportSingleExcel();document.getElementById("singlePdfBtn").onclick=()=>printSingle();document.getElementById("summaryExcelBtn").onclick=exportSummaryExcel;document.getElementById("summaryPdfBtn").onclick=printSummary;
 
 
