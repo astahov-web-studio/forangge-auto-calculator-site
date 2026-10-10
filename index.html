@@ -44,7 +44,7 @@ input:focus,select:focus,textarea:focus{border-color:#91a7d5;box-shadow:0 0 0 4p
 .input-wrap{position:relative}.input-wrap input{padding-right:52px}.suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:#8e949d;pointer-events:none}
 .hint{font-size:10px;color:#9aa0a8;margin-top:5px;line-height:1.35}
 .common-card{margin-bottom:14px}
-.status-select.status-Выдан{border-color:#86d5b4;background:#f1fbf7}.status-select.status-Впути{border-color:#aac3f4;background:#f4f7ff}.status-select.status-Вброни{border-color:#f6cd91;background:#fff9ee}.status-select.status-Приехала{border-color:#c8b5f3;background:#f7f3ff}.status-select.status-Возврат{border-color:#f1abab;background:#fff5f5}
+.status-select.status-Выдан{border-color:#86d5b4;background:#f1fbf7}.status-select.status-Впути{border-color:#aac3f4;background:#f4f7ff}.status-select.status-Вброни{border-color:#f6cd91;background:#fff9ee}.status-select.status-Поискавто{border-color:#9ed8e0;background:#f0fbfc}.status-select.status-Приехала{border-color:#c8b5f3;background:#f7f3ff}.status-select.status-Возврат{border-color:#f1abab;background:#fff5f5}
 .comment-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.comment-preview{font-size:12px;color:#737a85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:130px}
 .result-card{position:sticky;top:16px;padding:0;overflow:hidden}.result-top{background:#16191f;color:#fff;padding:21px}
 .result-label{text-transform:uppercase;letter-spacing:.08em;color:#b9c0ca;font-weight:750;font-size:10px}
@@ -65,7 +65,7 @@ input:focus,select:focus,textarea:focus{border-color:#91a7d5;box-shadow:0 0 0 4p
 th,td{padding:12px 13px;text-align:left;border-bottom:1px solid #eef0f3;vertical-align:middle}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#828a95;background:#fafbfc}td{font-size:12px}
 tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;color:#9399a3;margin-top:3px}.money{font-weight:750;white-space:nowrap}
 .status{display:inline-flex;align-items:center;border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800;white-space:nowrap}
-.s-Выдан{background:#e9f8f1;color:#087a52}.s-Впути{background:#edf3ff;color:#2459bd}.s-Вброни{background:#fff3df;color:#a85b00}.s-Приехала{background:#f1ebff;color:#6941c6}.s-Возврат{background:#feecec;color:#b42318}.s-none{background:#f0f2f4;color:#6e7580}
+.s-Выдан{background:#e9f8f1;color:#087a52}.s-Впути{background:#edf3ff;color:#2459bd}.s-Вброни{background:#fff3df;color:#a85b00}.s-Поискавто{background:#eaf9fb;color:#0e7490}.s-Приехала{background:#f1ebff;color:#6941c6}.s-Возврат{background:#feecec;color:#b42318}.s-none{background:#f0f2f4;color:#6e7580}
 .icon-actions{display:flex;gap:5px;align-items:center}.icon-btn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800}.icon-btn:hover{background:#f5f6f8}
 .empty{padding:36px 18px;text-align:center;color:#9198a2;font-size:12px}
 .kpi-title{font-size:24px;font-weight:850;letter-spacing:-.03em;margin-bottom:4px}.kpi-sub{font-size:12px;color:var(--muted)}
@@ -474,7 +474,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
 <div class="page" id="appPage">
   <div class="header">
     <div>
-      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.18</span></div>
+      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.19</span></div>
       <h1>Автокалькулятор <span class="brand-by">by forangge</span></h1>
       <p class="subtitle">Бишкек, Харгос, Китай, Китай через Бишкек и Корея в одном интерфейсе.</p>
     </div>
@@ -518,7 +518,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
             <div class="field full"><label>Марка авто, клиент, телефон</label><input id="titleInput" placeholder="Например: GAC S7 · Алексей · 3723"></div>
             <div class="field"><label>Дата расчёта</label><input id="dateInput" type="date"></div>
             <div class="field"><label>Статус</label><select id="statusInput" class="status-select">
-              <option value="">Без статуса</option><option>В брони</option><option>В пути</option><option>Приехала</option><option>Выдан</option><option>Возврат</option>
+              <option value="">Без статуса</option><option>Поиск авто</option><option>В брони</option><option>В пути</option><option>Приехала</option><option>Выдан</option><option>Возврат</option>
             </select></div>
             <div class="field issued-date-field" id="issuedDateField">
               <label>Дата выдачи</label>
@@ -582,6 +582,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
       <div class="status-multi" id="historyStatusMulti">
         <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
         <div class="status-multi-menu">
+          <label class="status-multi-option"><input type="checkbox" value="Поиск авто"><span>Поиск авто</span></label>
           <label class="status-multi-option"><input type="checkbox" value="В брони"><span>В брони</span></label>
           <label class="status-multi-option"><input type="checkbox" value="В пути"><span>В пути</span></label>
           <label class="status-multi-option"><input type="checkbox" value="Приехала"><span>Приехала</span></label>
@@ -611,6 +612,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
       <div class="status-multi" id="summaryStatusMulti">
         <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
         <div class="status-multi-menu">
+          <label class="status-multi-option"><input type="checkbox" value="Поиск авто"><span>Поиск авто</span></label>
           <label class="status-multi-option"><input type="checkbox" value="В брони"><span>В брони</span></label>
           <label class="status-multi-option"><input type="checkbox" value="В пути"><span>В пути</span></label>
           <label class="status-multi-option"><input type="checkbox" value="Приехала"><span>Приехала</span></label>
@@ -649,6 +651,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
         <div><label>Статусы</label><div class="status-multi" id="anStatusMulti">
         <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
         <div class="status-multi-menu">
+          <label class="status-multi-option"><input type="checkbox" value="Поиск авто"><span>Поиск авто</span></label>
           <label class="status-multi-option"><input type="checkbox" value="В брони"><span>В брони</span></label>
           <label class="status-multi-option"><input type="checkbox" value="В пути"><span>В пути</span></label>
           <label class="status-multi-option"><input type="checkbox" value="Приехала"><span>Приехала</span></label>
@@ -700,7 +703,7 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_DCjGSeXT4qQ89OkDVZx_Pw_PZDCO3yV";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const LOGIN_DOMAIN="@forangge.local";
 const DIRECTIONS=["Бишкек","Харгос","Китай","Китай через Бишкек","Корея"];
-const STATUS_CLASSES={"Выдан":"s-Выдан","В пути":"s-Впути","В брони":"s-Вброни","Приехала":"s-Приехала","Возврат":"s-Возврат","":"s-none"};
+const STATUS_CLASSES={"Выдан":"s-Выдан","В пути":"s-Впути","В брони":"s-Вброни","Поиск авто":"s-Поискавто","Приехала":"s-Приехала","Возврат":"s-Возврат","":"s-none"};
 const nf0=new Intl.NumberFormat("ru-RU",{maximumFractionDigits:0});
 const nf2=new Intl.NumberFormat("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2});
 const usd0=new Intl.NumberFormat("en-US",{maximumFractionDigits:0});
