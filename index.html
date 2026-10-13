@@ -474,7 +474,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
 <div class="page" id="appPage">
   <div class="header">
     <div>
-      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.19</span></div>
+      <div class="eyebrow"><span class="dot"></span>Автокалькулятор <span class="build-tag">v0.20</span></div>
       <h1>Автокалькулятор <span class="brand-by">by forangge</span></h1>
       <p class="subtitle">Бишкек, Харгос, Китай, Китай через Бишкек и Корея в одном интерфейсе.</p>
     </div>
@@ -569,7 +569,7 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
     <div class="history-mode-bar show">
       <div>
         <div class="history-mode-title">История всех просчётов</div>
-        <div class="history-mode-note">Здесь хранятся все сохранённые расчёты. «Предварительные» не входят в «Сводку» и «Итоги», а записи «В Сводке» уже учитываются в рабочих показателях.</div>
+        <div class="history-mode-note">Здесь хранятся все сохранённые расчёты. «Предварительные» не входят в «Сводку» и «Итоги», а записи «В Сводке» уже учитываются в рабочих показателях. По умолчанию новые просчёты находятся сверху; порядок можно изменить фильтром сортировки.</div>
       </div>
       <div class="history-mode-actions">
         <button class="btn primary" id="historyNewBtn">+ Перейти в калькулятор</button>
@@ -579,6 +579,12 @@ tbody tr:hover{background:#fafbfc}.name{font-weight:750}.sub{font-size:10px;colo
       <input class="grow" id="historySearch" placeholder="Поиск по машине, клиенту, телефону, VIN или комментарию">
       <select id="historyDirection"><option value="">Все направления</option><option>Бишкек</option><option>Харгос</option><option>Китай</option><option>Китай через Бишкек</option><option>Корея</option></select>
       <select id="historyScope"><option value="">Все просчёты</option><option value="history">Предварительные</option><option value="summary">В Сводке</option></select>
+      <select id="historySort" title="Сортировка истории">
+        <option value="created-desc">Сначала новые</option>
+        <option value="calc-desc">Дата расчёта: новые → старые</option>
+        <option value="calc-asc">Дата расчёта: старые → новые</option>
+        <option value="updated-desc">Последние изменения</option>
+      </select>
       <div class="status-multi" id="historyStatusMulti">
         <button type="button" class="status-multi-btn"><span class="status-multi-label">Все статусы</span><span class="status-multi-arrow">⌄</span></button>
         <div class="status-multi-menu">
@@ -1324,16 +1330,43 @@ function renderMobileSummary(rows){
 initStatusMulti("summaryStatusMulti",renderSummary);
 
 
+function historyTimestamp(value){
+  if(!value)return 0;
+  const t=Date.parse(value);
+  return Number.isFinite(t)?t:0;
+}
+function historyCreatedCompare(a,b){
+  return historyTimestamp(b.createdAt||b.updatedAt)-historyTimestamp(a.createdAt||a.updatedAt);
+}
+function sortHistoryRows(rows){
+  const mode=document.getElementById("historySort")?.value||"created-desc";
+  return [...rows].sort((a,b)=>{
+    if(mode==="updated-desc"){
+      const diff=historyTimestamp(b.updatedAt||b.createdAt)-historyTimestamp(a.updatedAt||a.createdAt);
+      return diff||historyCreatedCompare(a,b);
+    }
+    if(mode==="calc-desc"||mode==="calc-asc"){
+      const ad=a.date||"",bd=b.date||"";
+      if(!ad&&!bd)return historyCreatedCompare(a,b);
+      if(!ad)return 1;
+      if(!bd)return -1;
+      const diff=mode==="calc-desc"?bd.localeCompare(ad):ad.localeCompare(bd);
+      return diff||historyCreatedCompare(a,b);
+    }
+    return historyCreatedCompare(a,b);
+  });
+}
 function getHistoryRows(){
   const q=document.getElementById("historySearch").value.trim().toLowerCase();
   const d=document.getElementById("historyDirection").value;
   const scope=document.getElementById("historyScope").value;
   const statuses=selectedStatuses("historyStatusMulti");
-  return state.records.filter(r=>{
+  const filtered=state.records.filter(r=>{
     const actualScope=r.scope||"summary";
     const bag=(r.title+" "+(r.comment||"")+" "+(r.inputs?.vin||"")).toLowerCase();
     return(!q||bag.includes(q))&&(!d||r.direction===d)&&(!scope||actualScope===scope)&&statusFilterMatches(r.status,statuses)
-  })
+  });
+  return sortHistoryRows(filtered);
 }
 function renderHistory(){
   const rows=getHistoryRows();
@@ -1450,7 +1483,7 @@ async function promoteCurrentToSummary(){
   }
 }
 document.getElementById("promoteEditBtn").onclick=promoteCurrentToSummary;
-["historySearch","historyDirection","historyScope"].forEach(id=>document.getElementById(id).addEventListener(id==="historySearch"?"input":"change",renderHistory));
+["historySearch","historyDirection","historyScope","historySort"].forEach(id=>document.getElementById(id).addEventListener(id==="historySearch"?"input":"change",renderHistory));
 initStatusMulti("historyStatusMulti",renderHistory);
 
 function analyticsRows(){
